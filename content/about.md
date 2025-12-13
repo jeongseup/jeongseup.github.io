@@ -1,17 +1,13 @@
----
-title: "About Me"
-date: 2023-10-26T12:00:00+09:00
-draft: false
----
++++
+title = "About"
+description = "This is a blog about software development, cloud, and everything in between."
+date = "2025-12-13"
+aliases = ["about-us", "about-this-blog"]
+author = "Jeongseup"
++++
 
-I am a passionate developer who loves to code and write.
+Welcome to my personal blog! I'm Jeongseup, a software developer interested in various technologies, especially cloud-native applications, distributed systems, and DevOps.
 
-## My Journey
+I believe in continuous learning and sharing knowledge. This blog serves as a platform for me to document my learning journey, share insights, and discuss topics related to software engineering, cloud computing, and personal development.
 
-I started coding when I was...
-
-## Skills
-
-*   Go
-*   Hugo
-*   Kubernetes
+Feel free to explore my posts, projects, and contact me if you have any questions or just want to connect!

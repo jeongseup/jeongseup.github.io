@@ -1,10 +1,10 @@
----
-title: "Contact Me"
-date: 2023-10-26T12:00:00+09:00
-draft: false
----
++++
+title = "Contact"
+slug = "contact"
++++
 
-Feel free to reach out to me via email or social media.
+Feel free to connect with me on social media or send me an email.
 
-*   Email: jeongseup@example.com
-*   Twitter: @jeongseup
+*   **Email**: your_email@example.com
+*   **GitHub**: [jeongseup](https://github.com/jeongseup)
+*   **LinkedIn**: [jeongseup](https://www.linkedin.com/in/jeongseup)

@@ -1,7 +1,10 @@
----
-title: "Hello World"
-date: 2023-10-26T12:00:00+09:00
-draft: false
----
++++
+title = "Hello World"
+date = "2025-12-13"
+description = "This is my first post on this new blog."
+tags = ["greeting", "blog"]
+categories = ["General"]
+series = ["Getting Started"]
++++
 
-This is my first post in English.
+Welcome to my blog! This is the very first post. I'm excited to share my thoughts and experiences with you all. Stay tuned for more content!

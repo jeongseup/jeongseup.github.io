@@ -1,15 +1,10 @@
----
-title: "My Projects"
-date: 2023-10-26T12:00:00+09:00
-draft: false
----
++++
+title = "Projects"
+slug = "projects"
++++
 
-Here are some of the projects I've worked on.
+Here are some of the projects I've worked on or am currently working on:
 
-## Project A
-
-Description of Project A.
-
-## Project B
-
-Description of Project B.
+*   **Project Gemini**: A personal CLI agent for software engineering tasks.
+*   **My Blog**: This very blog, built with Hugo and Hugo-Coder theme.
+*   **Other projects**: Various open-source contributions and personal experiments on GitHub.
