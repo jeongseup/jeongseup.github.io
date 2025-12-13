@@ -1,0 +1,50 @@
+baseURL = 'https://Jeongseup.github.io'
+languageCode = 'en-us'
+title = 'My New Hugo Blog'
+theme = 'hugo-coder'
+
+[params]
+  author = 'John Doe'
+  info = 'Full Stack DevOps and Magician'
+  description = "John Doe's personal website"
+  keywords = 'blog,developer,personal'
+  avatar_url = 'images/avatar.jpg'
+  # graveatar = 'john.doe@example.com'
+  
+  # Be sure to copy the icons folder to your static folder
+  favicon_32 = '/images/favicon-32x32.png'
+  favicon_16 = '/images/favicon-16x16.png'
+
+  since = 2025
+
+  enableTwemoji = true
+
+  colorScheme = 'auto'
+  hideFullResImage = true
+
+  # Social links
+  [[params.social]]
+    name = "Github"
+    icon = "fa fa-2x fa-github"
+    weight = 1
+    url = "https://github.com/johndoe/"
+
+  [[params.social]]
+    name = "Twitter"
+    icon = "fa fa-2x fa-twitter"
+    weight = 2
+    url = "https://twitter.com/johndoe/"
+
+[menu]
+  [[menu.main]]
+    name = "About"
+    weight = 1
+    url = "about/"
+  [[menu.main]]
+    name = "Blog"
+    weight = 2
+    url = "posts/"
+  [[menu.main]]
+    name = "Projects"
+    weight = 3
+    url = "projects/"
