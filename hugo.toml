@@ -1,20 +1,16 @@
-baseURL = 'https://Jeongseup.github.io'
-languageCode = 'en-us'
-title = 'My New Hugo Blog'
+baseURL = 'https://jeongseup.github.io'
+title = 'Jeongseup Blog'
 theme = 'hugo-coder'
+defaultContentLanguage = 'en'
+enableEmoji = true
 
 [params]
-  author = 'John Doe'
-  info = 'Full Stack DevOps and Magician'
-  description = "John Doe's personal website"
+  author = 'Jeongseup'
+  info = 'Developer'
+  description = "Jeongseup's personal website"
   keywords = 'blog,developer,personal'
   avatar_url = 'images/avatar.jpg'
-  # graveatar = 'john.doe@example.com'
   
-  # Be sure to copy the icons folder to your static folder
-  favicon_32 = '/images/favicon-32x32.png'
-  favicon_16 = '/images/favicon-16x16.png'
-
   since = 2025
 
   enableTwemoji = true
@@ -25,26 +21,61 @@ theme = 'hugo-coder'
   # Social links
   [[params.social]]
     name = "Github"
-    icon = "fa fa-2x fa-github"
+    icon = "fa-brands fa-github fa-2x"
     weight = 1
-    url = "https://github.com/johndoe/"
+    url = "https://github.com/jeongseup/"
 
-  [[params.social]]
-    name = "Twitter"
-    icon = "fa fa-2x fa-twitter"
-    weight = 2
-    url = "https://twitter.com/johndoe/"
-
-[menu]
-  [[menu.main]]
-    name = "About"
+[languages]
+  [languages.en]
+    languageName = "🇬🇧 English"
+    title = "Jeongseup Blog"
     weight = 1
-    url = "about/"
-  [[menu.main]]
-    name = "Blog"
+
+    [languages.en.params]
+      author = "Jeongseup"
+      info = "Developer"
+      description = "Jeongseup's personal website"
+
+    [[languages.en.menu.main]]
+      name = "About"
+      weight = 1
+      url = "about/"
+    [[languages.en.menu.main]]
+      name = "Blog"
+      weight = 2
+      url = "posts/"
+    [[languages.en.menu.main]]
+      name = "Projects"
+      weight = 3
+      url = "projects/"
+    [[languages.en.menu.main]]
+      name = "Contact Me"
+      weight = 4
+      url = "contact/"
+
+  [languages.ko]
+    languageName = "🇰🇷 한국어"
+    title = "정섭 블로그"
     weight = 2
-    url = "posts/"
-  [[menu.main]]
-    name = "Projects"
-    weight = 3
-    url = "projects/"
+
+    [languages.ko.params]
+      author = "정섭"
+      info = "개발자"
+      description = "정섭의 개인 웹사이트"
+
+    [[languages.ko.menu.main]]
+      name = "소개"
+      weight = 1
+      url = "about/"
+    [[languages.ko.menu.main]]
+      name = "블로그"
+      weight = 2
+      url = "posts/"
+    [[languages.ko.menu.main]]
+      name = "프로젝트"
+      weight = 3
+      url = "projects/"
+    [[languages.ko.menu.main]]
+      name = "연락하기"
+      weight = 4
+      url = "contact/"
