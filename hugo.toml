@@ -28,6 +28,8 @@ enableGitInfo = true
   enableTwemoji = true
   colorScheme = 'auto'
   hideFullResImage = true
+  math = true
+  
   commit = "https://github.com/jeongseup/jeongseup.github.io/tree/"
 
   # Social links
@@ -48,6 +50,12 @@ enableGitInfo = true
     url = "https://jeongseup.github.io/index.xml"
     rel = "alternate"
     type = "application/rss+xml"
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
 
 [languages]
   [languages.en]
