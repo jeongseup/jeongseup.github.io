@@ -1,5 +1,5 @@
 ---
-title: "[Archive] Validator Reward Deep Dive Series"
+title: "Validator Reward Deep Dive Series"
 date: 2026-01-03
 categories:
     - "Technical Research"
@@ -20,28 +20,28 @@ To build robust infrastructure, we needed to go beyond the surface and understan
 
 ### 1. [Walrus: The Secret of Staking Rewards](https://medium.com/cosmostation/validator-reward-deep-dive-series-1-walrus-the-secret-of-staking-rewards-a-complete-guide-to-87240f4af3af)
 
-- **Focus:** The fundamental mechanics of the Cosmos SDK `mint` and `distribution` modules.
-- **Key Insight:** A deep dive into how voting power and block provisions translate into actual numbers, exploring the "Walrus" logic of reward distribution.
+- **Focus:** The reward distribution mechanism of the Walrus protocol, including epoch changes and exchange rate calculations.
+- **Key Insight:** deeply analyzes `initiate_epoch_change` and `process_pending_stake` to explain how rewards are determined by the exchange rate difference between staking and withdrawal.
 
 ### 2. [Sui: How are Epoch Rewards Delivered to Stakers?](https://medium.com/cosmostation/validator-reward-deep-dive-series-2-sui-how-are-epoch-rewards-delivered-to-stakers-86765ce1c7ae)
 
-- **Focus:** Sui’s unique object-based model and epoch-based reward distribution.
-- **Key Insight:** Understanding the Delegated Proof of Stake (DPoS) mechanism on Sui and how reward pools are filled and drained at each epoch boundary.
+- **Focus:** The native staking reward mechanism of the Sui protocol, driven by epoch changes and the `sui_system` Move package.
+- **Key Insight:** Explains how the `StakingPool`'s exchange rate tracks the compounding value of SUI rewards, allowing delegator rewards to be calculated based on the rate difference between staking and withdrawal.
 
 ### 3. [Cosmos: How do Inflation and Fees become Delegator Rewards?](https://medium.com/cosmostation/validator-reward-deep-dive-series-3-cosmos-how-do-inflation-and-fees-become-delegator-rewards-6d41c781a7b6)
 
-- **Focus:** The lifecycle of a token from inflation/transaction fees to a delegator's wallet.
-- **Key Insight:** Detailed analysis of the F1 Fee Distribution mechanism used in the Cosmos ecosystem to handle rewards efficiently at scale.
+- **Focus:** The organic interaction of `x/mint`, `x/auth`, `FeeCollector`, `x/distribution`, and `x/staking` modules to source, aggregate, and distribute rewards.
+- **Key Insight:** Explains the flow from sourcing (inflation/fees) to the `FeeCollector`, then to validator pools, and finally to delegators via share-based calculation using the 'cumulative reward ratio' (F1 Fee Distribution).
 
 ### 4. [Kaia: Staking Rewards in Public Delegation Contract](https://medium.com/cosmostation/validator-reward-deep-dive-series-4-kaia-kaia-staking-rewards-in-public-delegation-contract-7f9f376cdf75)
 
-- **Focus:** Smart contract-based staking on the Kaia (formerly Klaytn) network.
-- **Key Insight:** Technical breakdown of how the Public Delegation Contract manages rewards and the specific logic for fee sharing between validators and delegators.
+- **Focus:** The staking reward mechanism centered around the `PublicDelegation.sol` system contract and ERC-20 based share tokens.
+- **Key Insight:** Describes how `stake()` triggers auto-compounding, increasing the pool's total KAIA while keeping shares constant, thus raising the share value (Value Accrual) which becomes the delegator's reward.
 
 ### 5. [Namada: PoS Staking and Inflation in Namada](https://medium.com/cosmostation/validator-reward-deep-dive-series-5-namada-pos-staking-and-inflation-in-namada-5e8a2f061364)
 
-- **Focus:** The privacy-centric PoS mechanism of the Namada protocol.
-- **Key Insight:** Exploring Namada's Cubic Slashing and the unique inflation model designed to incentivize both security and privacy.
+- **Focus:** Namada's epoch-based PoS inflation and the unique 'Reward Product' mechanism for tracking rewards.
+- **Key Insight:** Explains how the `reward_product` (reward ratio per stake) is recorded each epoch, allowing delegator rewards to be calculated as the sum of `delegated_amount * reward_product` over the delegation period.
 
 ---
 
