@@ -15,7 +15,7 @@ hasCJKLanguage = true
 disqusShortname = "hugo-theme-stack"
 
 [services.googleAnalytics]
-    id = "" # G-XXXXXXXXXX
+    id = "G-H52JV5SRGP"
     name = "Jeongseup"
     email = "jeongseup@example.com"
     avatar = "/img/avatar.jpg"
