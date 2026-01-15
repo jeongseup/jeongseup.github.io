@@ -1,0 +1,23 @@
+# Change baseurl before deploy
+baseurl = "https://jeongseup.github.io"
+languageCode = "en-us"
+title = "Jeongseup Blog"
+
+# Theme i18n support
+# Available values: en, fr, id, ja, ko, pt-br, zh-cn, zh-tw, es, de, nl, it, th, el, uk, ar
+defaultContentLanguage = "en"
+
+# Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
+# This will make .Summary and .WordCount behave correctly for CJK languages.
+hasCJKLanguage = true
+
+# Change it to your Disqus shortname before using
+disqusShortname = "hugo-theme-stack"
+
+[author]
+    name = "Jeongseup"
+    email = "jeongseup@example.com"
+    avatar = "/img/avatar.jpg"
+
+[pagination]
+pagerSize = 5

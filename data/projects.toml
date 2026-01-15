@@ -1,0 +1,38 @@
+
+
+[[outsourcing]]
+  name = "Newton Protocol PoC"
+  role = "Outsourced Developer"
+  description = "Developed the Proof of Concept (PoC) for the Newton Protocol and reviewed developer documentation for accuracy and usability."
+
+[[outsourcing]]
+  name = "Ludium Backend Renewal"
+  role = "Backend Engineer"
+  description = "Redesigned data schemas and developed APIs on Google Cloud Platform (GCP). Implemented a contract relayer to facilitate interaction between the backend and blockchain smart contracts."
+  stack = ["GCP", "Go", "SQL"]
+
+[[hackathons]]
+  name = "Base Batches 002"
+  year = "2025"
+  role = "Builder Track"
+  description = "Developed a mini-app for the Base ecosystem."
+  project_name = "base-batch-mini-app"
+
+[[education]]
+  name = "Cosmos SDK Live Instructor"
+  role = "Instructor | Ludium"
+  description = "Hosted '[Road to Dubai]' lecture series, teaching Cosmos SDK fundamentals to developers."
+
+[[education]]
+  name = "Technical Writer"
+  role = "Author"
+  description = "Authored educational content and documentation for Cosmos SDK and CosmWasm basics."
+
+[[contribution]]
+  name = "Namada"
+[[contribution]]
+  name = "Babylon"
+[[contribution]]
+  name = "Axelar"
+[[contribution]]
+  name = "BNB Chain (Greenfield)"

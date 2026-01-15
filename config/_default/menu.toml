@@ -1,0 +1,79 @@
+# Configure main menu and social menu
+[[main]]
+identifier = "about"
+name = "About"
+url = "/about/"
+weight = 1
+[main.params]
+icon = "user"
+
+
+
+
+
+[[main]]
+identifier = "contribution"
+name = "Open Source"
+url = "/contribution/"
+weight = 4
+[main.params]
+icon = "brand-github"
+
+[[main]]
+identifier = "research"
+name = "Technical Research"
+url = "/research/"
+weight = 5
+[main.params]
+icon = "chart-dots"
+
+[[main]]
+identifier = "contact"
+name = "Contact Me"
+url = "/contact/"
+weight = 6
+[main.params]
+icon = "mail"
+
+
+[[social]]
+identifier = "github"
+name = "GitHub"
+url = "https://github.com/jeongseup/"
+[social.params]
+icon = "brand-github"
+
+[[social]]
+identifier = "linkedin"
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/jeongseup/"
+[social.params]
+icon = "brand-linkedin"
+
+[[social]]
+identifier = "medium"
+name = "Medium"
+url = "https://medium.com/@jeongseup"
+[social.params]
+icon = "brand-medium"
+
+[[social]]
+identifier = "twitter"
+name = "Twitter"
+url = "https://x.com/jeongseup"
+[social.params]
+icon = "brand-x"
+
+[[social]]
+identifier = "farcaster"
+name = "Farcaster"
+url = "https://warpcast.com/cosmoseup"
+[social.params]
+icon = "cube" 
+
+[[social]]
+identifier = "telegram"
+name = "Telegram"
+url = "https://t.me/jeongseup"
+[social.params]
+icon = "brand-telegram"

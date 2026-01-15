@@ -1,0 +1,32 @@
+{{ $type := .Get "type" }} {{ $projects := index site.Data.projects $type }} {{
+if or (eq $type "main") (eq $type "outsourcing") }} {{ range $projects }}
+<h3>{{ .name }}</h3>
+<ul>
+  <li><strong>Role</strong>: {{ .role }}</li>
+  <li><strong>Description</strong>: {{ .description }}</li>
+  {{ if .stack }}
+  <li><strong>Tech Stack</strong>: {{ delimit .stack ", " }}</li>
+  {{ end }} {{ if .link }}
+  <li><a href="{{ .link }}" target="_blank">View Project</a></li>
+  {{ end }}
+</ul>
+{{ end }} {{ else if eq $type "hackathons" }} {{ range $projects }}
+<h3>{{ .name }} ({{ .year }})</h3>
+<ul>
+  <li><strong>Project</strong>: <code>{{ .project_name }}</code></li>
+  <li><strong>Track</strong>: {{ .role }}</li>
+  <li><strong>Description</strong>: {{ .description }}</li>
+</ul>
+{{ end }} {{ else if eq $type "education" }} {{ range $projects }}
+<h3>{{ .name }}</h3>
+<ul>
+  <li><strong>Role</strong>: {{ .role }}</li>
+  <li><strong>Description</strong>: {{ .description }}</li>
+</ul>
+{{ end }} {{ else if eq $type "contribution" }}
+<ul>
+  {{ range $projects }}
+  <li><strong>{{ .name }}</strong></li>
+  {{ end }}
+</ul>
+{{ end }}
