@@ -1,6 +1,7 @@
 ---
 title: "BaseCard"
 date: 2025-11-01
+image: img/thumbs/project_basecard.png
 description: "A Farcaster mini-app for the Base ecosystem, connecting builders. Led full-stack development including backend, smart contracts, and deployment agents."
 categories:
     - "Web3"

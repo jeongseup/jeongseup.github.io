@@ -1,6 +1,7 @@
 ---
 title: "CVMS (Cosmos Validator Monitoring Service)"
 date: 2024-11-13
+image: img/thumbs/project_cvms.png
 description: "An open-source monitoring tool designed for Cosmos-SDK validator nodes. It provides real-time metrics and alerts to ensure node stability and performance."
 categories:
     - "Monitoring"

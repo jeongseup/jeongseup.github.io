@@ -21,12 +21,12 @@
   <h2 class="widget-title section-title">Projects</h2>
 
   <div class="widget-archive--list">
-    {{ range first 5 (where .Context.Site.RegularPages "Section" "project") }}
+    {{ with .Context.Site.GetPage "section" "project" }} {{ range .Sections }}
     <div class="archives-year">
       <a href="{{ .RelPermalink }}">
         <span class="year">{{ .Title }}</span>
       </a>
     </div>
-    {{ end }}
+    {{ end }} {{ end }}
   </div>
 </section>

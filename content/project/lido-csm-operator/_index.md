@@ -1,6 +1,7 @@
 ---
 title: "Lido CSM Operator"
 date: 2025-11-01
+image: img/thumbs/project_lido.png
 description: "A community-supported validator node for Lido Finance. Developing open-source IaC tools (lido-csm-node-operator) to simplify deployment for other operators."
 categories:
     - "Infrastructure"
