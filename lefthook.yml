@@ -1,0 +1,4 @@
+pre-push:
+  commands:
+    hugo-build:
+      run: hugo --minify
