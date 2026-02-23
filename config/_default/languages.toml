@@ -1,15 +1,7 @@
 [en]
-languageName = "🇬🇧 English"
+languageName = "English"
 title = "Jeongseup Blog"
 weight = 1
 
 [en.params]
 description = "Jeongseup's personal blog. Blockchain Protocol Specialist, DevOps, and Solution Engineer."
-
-[ko]
-languageName = "🇰🇷 한국어"
-title = "정섭 블로그"
-weight = 2
-
-[ko.params]
-description = "정섭의 소프트웨어 개발, 클라우드 및 기술 블로그."
