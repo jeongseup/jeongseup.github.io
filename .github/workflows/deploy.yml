@@ -2,19 +2,13 @@ name: Deploy to Github Pages
 
 on:
     push:
-        branches: [master]
+        branches: [main]
     pull_request:
-        branches: [master]
+        branches: [main]
 
 jobs:
     build:
         runs-on: ubuntu-latest
-
-        permissions:
-            # Give the default GITHUB_TOKEN write permission to commit and push the
-            # added or changed files to the repository.
-            contents: write
-
         steps:
             - uses: actions/checkout@v4
               with:
@@ -31,18 +25,38 @@ jobs:
             - uses: actions/setup-go@v5
               with:
                   go-version: "^1.17.0"
-            - run: go version
 
             - name: Setup Hugo
-              uses: peaceiris/actions-hugo@v2
+              uses: peaceiris/actions-hugo@v3
               with:
-                  hugo-version: "latest"
+                  hugo-version: "0.152.2"
                   extended: true
 
             - name: Build
               run: hugo --minify --gc
 
-            - name: Deploy 🚀
+            - name: Upload build artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: public
+                  path: public/
+
+    deploy:
+        needs: build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Download build artifact
+              uses: actions/download-artifact@v4
+              with:
+                  name: public
+                  path: public/
+
+            - name: Deploy
               uses: JamesIves/github-pages-deploy-action@v4
               with:
                   branch: gh-pages
