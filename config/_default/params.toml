@@ -59,7 +59,7 @@ limit = 10
 type = "toc"
 
 [opengraph.twitter]
-site = ""
+site = "@jeongseup"
 card = "summary_large_image"
 
 [defaultImage.opengraph]
