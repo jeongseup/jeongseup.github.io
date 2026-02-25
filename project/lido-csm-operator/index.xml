@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lido CSM Operator on Jeongseup Blog</title><link>https://jeongseup.github.io/project/lido-csm-operator/</link><description>Recent content in Lido CSM Operator on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 14 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/project/lido-csm-operator/index.xml" rel="self" type="application/rss+xml"/><item><title>Lido CSM Performance Report</title><link>https://jeongseup.github.io/project/lido-csm-operator/demo-2/</link><pubDate>Wed, 14 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/lido-csm-operator/demo-2/</guid><description>&lt;h1 id="performance-report"&gt;Performance Report
+&lt;/h1&gt;&lt;p&gt;Validator performance has been stable at 100% uptime.&lt;/p&gt;</description></item><item><title>Lido CSM Operator Setup Guide</title><link>https://jeongseup.github.io/project/lido-csm-operator/demo-1/</link><pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/lido-csm-operator/demo-1/</guid><description>&lt;h1 id="setup-guide"&gt;Setup Guide
+&lt;/h1&gt;&lt;p&gt;Follow these steps to set up your operator node.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Install dependencies&lt;/li&gt;
+&lt;li&gt;Run the initialization script&lt;/li&gt;
+&lt;/ol&gt;</description></item></channel></rss>

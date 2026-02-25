@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blockchain on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/blockchain/</link><description>Recent content in Blockchain on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 25 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/blockchain/index.xml" rel="self" type="application/rss+xml"/><item><title>EVM은 왜 정수(uint)만 지원하는가?</title><link>https://jeongseup.github.io/p/evm-integer-only-design/</link><pubDate>Wed, 25 Feb 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/p/evm-integer-only-design/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;Solidity에 float이 없는 이유와 블록체인 합의의 관계&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="핵심-이유-부동소수점은-합의를-깨뜨린다"&gt;핵심 이유: 부동소수점은 합의를 깨뜨린다
+&lt;/h2&gt;&lt;p&gt;블록체인은 수천 개 노드가 동일한 계산을 수행하고 &lt;strong&gt;같은 결과에 합의&lt;/strong&gt;해야 하는 시스템이다.&lt;/p&gt;
+&lt;p&gt;그런데 IEEE 754 부동소수점(&lt;code&gt;float&lt;/code&gt;/&lt;code&gt;double&lt;/code&gt;)은 하드웨어마다 미세하게 다른 결과를 낼 수 있다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0.1 + 0.2 =
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node A (Intel x86): 0.30000000000000004
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node B (ARM Cortex): 0.30000000000000001
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node C (AMD Ryzen): 0.30000000000000004
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ A와 C는 같은 상태 해시, B는 다른 상태 해시
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 합의 실패 → 체인 포크!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;반면 정수 연산은 어떤 CPU에서든 동일하다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;800 * 1e18 / 1000 = 800000000000000000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 100% 결정론적(deterministic) → 합의 보장
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="이유-1-결정론determinism--가장-근본적"&gt;이유 1: 결정론(Determinism) — 가장 근본적
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;float&lt;/code&gt;이 비결정론적인 구체적 원인들을 살펴보자.&lt;/p&gt;
+&lt;h3 id="반올림-모드-차이"&gt;반올림 모드 차이
+&lt;/h3&gt;&lt;p&gt;IEEE 754에는 4가지 반올림 모드가 있다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Round to nearest (even)&lt;/strong&gt; — 기본값이지만 바꿀 수 있음&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward zero&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward +∞&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward -∞&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CPU나 컴파일러 설정에 따라 모드가 달라질 수 있다.&lt;/p&gt;
+&lt;h3 id="비결합법칙-non-associativity"&gt;비결합법칙 (Non-associativity)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;정수: (a + b) + c = a + (b + c) ← 항상 같음
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;float: (a + b) + c ≠ a + (b + c) ← 다를 수 있음!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;예를 들어 &lt;code&gt;a=1e20, b=-1e20, c=1.0&lt;/code&gt;일 때:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;(a + b) + c = 0 + 1.0 = 1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;a + (b + c) = 1e20 + (-1e20) = 0.0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;컴파일러 최적화가 연산 순서를 바꾸면 결과가 달라진다.&lt;/p&gt;
+&lt;h3 id="특수값-처리-차이"&gt;특수값 처리 차이
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;NaN&lt;/code&gt;, &lt;code&gt;Infinity&lt;/code&gt;, &lt;code&gt;-0&lt;/code&gt;, denormalized numbers 등 특수값들의 비교·연산 동작이 구현마다 미세하게 다르다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="이유-2-금융-정밀도--float은-돈-계산에-위험"&gt;이유 2: 금융 정밀도 — float은 돈 계산에 위험
+&lt;/h2&gt;&lt;p&gt;은행도 &lt;code&gt;float&lt;/code&gt;을 쓰지 않는다:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;시스템&lt;/th&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;COBOL&lt;/td&gt;
+&lt;td&gt;고정소수점 (packed decimal)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Java&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;BigDecimal&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;decimal&lt;/code&gt; 모듈&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;블록체인&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;uint256&lt;/code&gt; + 1e18 스케일링&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;float&lt;/code&gt;의 위험을 구체적으로 보면:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;잔고 100.10 USDC를 float로 저장하면?
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 실제 저장값: 100.09999999999999...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 100만 번 더하기/빼기 반복하면 오차 누적
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 잔고 불일치 → 자금 손실 또는 무한 인출 취약점
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;uint256&lt;/code&gt; + PRECISION 방식:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;100.10 USDC = 100_100_000 (USDC는 6 decimals)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 정확히 이 값. 오차 없음. 1000만 번 연산해도 동일.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="이유-3-evm-설계-단순화"&gt;이유 3: EVM 설계 단순화
+&lt;/h2&gt;&lt;p&gt;EVM은 &lt;strong&gt;256비트 워드 기반 스택 머신&lt;/strong&gt;이다. &lt;code&gt;uint256&lt;/code&gt; 하나로 통일하면:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;장점&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Opcode 수 적음 (&lt;code&gt;ADD&lt;/code&gt;, &lt;code&gt;MUL&lt;/code&gt;, &lt;code&gt;DIV&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;가스 비용 계산 간단 (고정 비용)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;구현 버그 감소&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;상태 저장 단순 (32 bytes 슬롯)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;만약 &lt;code&gt;float&lt;/code&gt;을 추가한다면:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;추가 복잡도&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;FADD&lt;/code&gt;, &lt;code&gt;FMUL&lt;/code&gt;, &lt;code&gt;FDIV&lt;/code&gt;, &lt;code&gt;FSQRT&lt;/code&gt; opcode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;반올림 모드 명세&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;NaN&lt;/code&gt;, &lt;code&gt;Infinity&lt;/code&gt;, &lt;code&gt;-0&lt;/code&gt; 처리 규칙&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;가스 비용 산정 (연산마다 다름)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int↔float&lt;/code&gt; 변환 opcode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;모든 EVM 구현체의 동작 일치 검증&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;복잡도 대비 이점이 없다. 정수 스케일링으로 충분하기 때문이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="다른-블록체인도-마찬가지인가"&gt;다른 블록체인도 마찬가지인가?
+&lt;/h2&gt;&lt;p&gt;L2도 &lt;code&gt;float&lt;/code&gt;을 명시적으로 제거한다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Optimism (Bedrock)&lt;/strong&gt;: float 연산 제외 — fraud proof 검증을 위해&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Arbitrum Nitro&lt;/strong&gt;: float 연산 제외 — 동일한 이유&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;다른 체인들도 마찬가지다:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;체인&lt;/th&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Solana (BPF)&lt;/td&gt;
+&lt;td&gt;정수 연산만 지원, float는 프로그램 레벨에서 처리&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cosmos (CosmWasm)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Decimal256&lt;/code&gt; 타입 제공 (uint 기반 구현)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Move (Sui/Aptos)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;u8&lt;/code&gt;/&lt;code&gt;u64&lt;/code&gt;/&lt;code&gt;u128&lt;/code&gt;/&lt;code&gt;u256&lt;/code&gt;만 지원, float 없음&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;블록체인 VM에서 float 배제는 업계 표준&lt;/strong&gt;이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="defi의-우회-방법들"&gt;DeFi의 우회 방법들
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;float&lt;/code&gt; 없이 소수점을 다루는 방법들:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;th&gt;사용 사례&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;1e18 (Mantissa)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Compound — 범용 비율 계산&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;1e27 (Ray)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Aave V3 — 더 높은 정밀도 필요 시&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;2^96 (Q notation)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Uniswap V3 — 제곱근 가격 계산 최적화&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Token decimals&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;USDC(6), WETH(18) — 토큰 단위 표현&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;WAD/RAY 라이브러리&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;ds-math, WadRayMath — 안전한 연산&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;공통 패턴: &lt;strong&gt;&amp;ldquo;정수로 표현하고, 나눗셈은 최대한 늦추고, 곱셈을 먼저&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="결론"&gt;결론
+&lt;/h2&gt;&lt;p&gt;EVM이 &lt;code&gt;uint&lt;/code&gt;만 지원하는 이유를 우선순위로 정리하면:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;합의 안전성&lt;/strong&gt; — float은 노드 간 결과 차이를 만들 수 있음&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;금융 정확성&lt;/strong&gt; — 돈 계산에 부동소수점은 위험&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;설계 단순성&lt;/strong&gt; — opcode와 가스 모델 복잡도 최소화&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이것은 **&amp;ldquo;기술적 한계&amp;quot;가 아니라 &amp;ldquo;의도적 설계 결정&amp;rdquo;**이다.&lt;/p&gt;
+&lt;p&gt;분산 합의가 필요 없는 시스템(게임 엔진, 과학 계산)에서는 float이 적합하지만, &lt;strong&gt;&amp;ldquo;수천 대 컴퓨터가 같은 답을 내야 하는&amp;rdquo; 블록체인에서는 정수가 유일한 선택&lt;/strong&gt;이다.&lt;/p&gt;</description></item><item><title>Validator Reward Deep Dive Series</title><link>https://jeongseup.github.io/research/2026-01-03-validator-reward-deep-dive.ko/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/research/2026-01-03-validator-reward-deep-dive.ko/</guid><description>&lt;h2 id="context--motivation"&gt;Context &amp;amp; Motivation
+&lt;/h2&gt;&lt;p&gt;This series was originally authored during my tenure at &lt;a class="link" href="https://cosmostation.io/" target="_blank" rel="noopener"
+&gt;Cosmostation&lt;/a&gt;, working with the Validator Team. The primary goal of this research was to provide a technical foundation for developing &lt;strong&gt;in-house validator monitoring and reward management tools&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To build robust infrastructure, we needed to go beyond the surface and understand the exact mathematical and programmatic flow of rewards across different blockchain architectures. This series documents that journey, covering Cosmos, Sui, Kaia, and Namada.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="series-index"&gt;Series Index
+&lt;/h2&gt;&lt;h3 id="1-walrus-the-secret-of-staking-rewards"&gt;1. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-1-walrus-the-secret-of-staking-rewards-a-complete-guide-to-87240f4af3af" target="_blank" rel="noopener"
+&gt;Walrus: The Secret of Staking Rewards&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; Walrus 프로토콜의 보상 분배 메커니즘, 에포크 변경 및 환율 계산 로직 분석.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; &lt;code&gt;initiate_epoch_change&lt;/code&gt;와 &lt;code&gt;process_pending_stake&lt;/code&gt;를 심층 분석하여 스테이킹 시점과 출금 시점의 환율 차이로 보상이 결정되는 과정을 설명합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-sui-how-are-epoch-rewards-delivered-to-stakers"&gt;2. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-2-sui-how-are-epoch-rewards-delivered-to-stakers-86765ce1c7ae" target="_blank" rel="noopener"
+&gt;Sui: How are Epoch Rewards Delivered to Stakers?&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; Sui 프로토콜의 네이티브 스테이킹 보상 메커니즘과 &lt;code&gt;sui_system&lt;/code&gt; Move 패키지를 통한 에포크 단위 보상 분배.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; &lt;code&gt;StakingPool&lt;/code&gt;의 환율(Exchange Rate)이 보상을 통해 어떻게 우상향하는지 설명하고, 스테이킹 및 출금 시점의 환율 차이로 보상이 산정되는 원리를 다룹니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-cosmos-how-do-inflation-and-fees-become-delegator-rewards"&gt;3. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-3-cosmos-how-do-inflation-and-fees-become-delegator-rewards-6d41c781a7b6" target="_blank" rel="noopener"
+&gt;Cosmos: How do Inflation and Fees become Delegator Rewards?&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; &lt;code&gt;x/mint&lt;/code&gt;, &lt;code&gt;x/auth&lt;/code&gt;, &lt;code&gt;FeeCollector&lt;/code&gt;, &lt;code&gt;x/distribution&lt;/code&gt;, &lt;code&gt;x/staking&lt;/code&gt; 모듈 간의 상호작용을 통한 보상 생성 및 분배의 유기적인 과정.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; 인플레이션과 수수료가 &lt;code&gt;FeeCollector&lt;/code&gt;에 모여 검증인 풀로 이동하고, &amp;lsquo;누적 보상 비율(Cumulative Reward Ratio)&amp;lsquo;과 지분(Share)을 기반으로 델리게이터에게 최종 분배되는 F1 모델의 흐름을 설명합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="4-kaia-staking-rewards-in-public-delegation-contract"&gt;4. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-4-kaia-kaia-staking-rewards-in-public-delegation-contract-7f9f376cdf75" target="_blank" rel="noopener"
+&gt;Kaia: Staking Rewards in Public Delegation Contract&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; &lt;code&gt;PublicDelegation.sol&lt;/code&gt; 시스템 컨트랙트와 ERC-20 기반 지분(Share) 토큰을 중심으로 한 스테이킹 보상 메커니즘.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; &lt;code&gt;stake()&lt;/code&gt; 호출 시 자동 재예치(Auto-compounding)가 발생하여 풀의 총 KAIA가 증가하고, 이로 인해 지분 가치가 상승(Value Accrual)하여 보상이 실현되는 원리를 설명합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="5-namada-pos-staking-and-inflation-in-namada"&gt;5. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-5-namada-pos-staking-and-inflation-in-namada-5e8a2f061364" target="_blank" rel="noopener"
+&gt;Namada: PoS Staking and Inflation in Namada&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; 나마다(Namada)의 에포크 기반 PoS 인플레이션과 &amp;lsquo;Reward Product&amp;rsquo; 방식을 이용한 독창적인 보상 기록 메커니즘.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; 매 에포크마다 위임 지분당 보상 비율인 &lt;code&gt;reward_product&lt;/code&gt;가 기록되며, 이를 통해 델리게이터의 보상이 &lt;code&gt;위임량 * reward_product&lt;/code&gt;의 합으로 산정되는 원리를 설명합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="reflection"&gt;Reflection
+&lt;/h2&gt;&lt;p&gt;Building tools for a top-tier validator team requires a &amp;ldquo;don&amp;rsquo;t trust, verify&amp;rdquo; mindset toward protocol specifications. These articles served as the technical blueprint for our engineering team to ensure reward calculation accuracy and operational excellence.&lt;/p&gt;
+&lt;p&gt;I hope this archive remains a useful resource for anyone diving deep into the economics of Proof-of-Stake networks.&lt;/p&gt;</description></item><item><title>Validator Reward Deep Dive Series</title><link>https://jeongseup.github.io/research/2026-01-03-validator-reward-deep-dive/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/research/2026-01-03-validator-reward-deep-dive/</guid><description>&lt;h2 id="context--motivation"&gt;Context &amp;amp; Motivation
+&lt;/h2&gt;&lt;p&gt;This series was originally authored during my tenure at &lt;a class="link" href="https://cosmostation.io/" target="_blank" rel="noopener"
+&gt;Cosmostation&lt;/a&gt;, working with the Validator Team. The primary goal of this research was to provide a technical foundation for developing &lt;strong&gt;in-house validator monitoring and reward management tools&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To build robust infrastructure, we needed to go beyond the surface and understand the exact mathematical and programmatic flow of rewards across different blockchain architectures. This series documents that journey, covering Cosmos, Sui, Kaia, and Namada.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="series-index"&gt;Series Index
+&lt;/h2&gt;&lt;h3 id="1-walrus-the-secret-of-staking-rewards"&gt;1. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-1-walrus-the-secret-of-staking-rewards-a-complete-guide-to-87240f4af3af" target="_blank" rel="noopener"
+&gt;Walrus: The Secret of Staking Rewards&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; The reward distribution mechanism of the Walrus protocol, including epoch changes and exchange rate calculations.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; deeply analyzes &lt;code&gt;initiate_epoch_change&lt;/code&gt; and &lt;code&gt;process_pending_stake&lt;/code&gt; to explain how rewards are determined by the exchange rate difference between staking and withdrawal.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-sui-how-are-epoch-rewards-delivered-to-stakers"&gt;2. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-2-sui-how-are-epoch-rewards-delivered-to-stakers-86765ce1c7ae" target="_blank" rel="noopener"
+&gt;Sui: How are Epoch Rewards Delivered to Stakers?&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; The native staking reward mechanism of the Sui protocol, driven by epoch changes and the &lt;code&gt;sui_system&lt;/code&gt; Move package.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; Explains how the &lt;code&gt;StakingPool&lt;/code&gt;&amp;rsquo;s exchange rate tracks the compounding value of SUI rewards, allowing delegator rewards to be calculated based on the rate difference between staking and withdrawal.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-cosmos-how-do-inflation-and-fees-become-delegator-rewards"&gt;3. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-3-cosmos-how-do-inflation-and-fees-become-delegator-rewards-6d41c781a7b6" target="_blank" rel="noopener"
+&gt;Cosmos: How do Inflation and Fees become Delegator Rewards?&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; The organic interaction of &lt;code&gt;x/mint&lt;/code&gt;, &lt;code&gt;x/auth&lt;/code&gt;, &lt;code&gt;FeeCollector&lt;/code&gt;, &lt;code&gt;x/distribution&lt;/code&gt;, and &lt;code&gt;x/staking&lt;/code&gt; modules to source, aggregate, and distribute rewards.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; Explains the flow from sourcing (inflation/fees) to the &lt;code&gt;FeeCollector&lt;/code&gt;, then to validator pools, and finally to delegators via share-based calculation using the &amp;lsquo;cumulative reward ratio&amp;rsquo; (F1 Fee Distribution).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="4-kaia-staking-rewards-in-public-delegation-contract"&gt;4. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-4-kaia-kaia-staking-rewards-in-public-delegation-contract-7f9f376cdf75" target="_blank" rel="noopener"
+&gt;Kaia: Staking Rewards in Public Delegation Contract&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; The staking reward mechanism centered around the &lt;code&gt;PublicDelegation.sol&lt;/code&gt; system contract and ERC-20 based share tokens.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; Describes how &lt;code&gt;stake()&lt;/code&gt; triggers auto-compounding, increasing the pool&amp;rsquo;s total KAIA while keeping shares constant, thus raising the share value (Value Accrual) which becomes the delegator&amp;rsquo;s reward.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="5-namada-pos-staking-and-inflation-in-namada"&gt;5. &lt;a class="link" href="https://medium.com/cosmostation/validator-reward-deep-dive-series-5-namada-pos-staking-and-inflation-in-namada-5e8a2f061364" target="_blank" rel="noopener"
+&gt;Namada: PoS Staking and Inflation in Namada&lt;/a&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Focus:&lt;/strong&gt; Namada&amp;rsquo;s epoch-based PoS inflation and the unique &amp;lsquo;Reward Product&amp;rsquo; mechanism for tracking rewards.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Insight:&lt;/strong&gt; Explains how the &lt;code&gt;reward_product&lt;/code&gt; (reward ratio per stake) is recorded each epoch, allowing delegator rewards to be calculated as the sum of &lt;code&gt;delegated_amount * reward_product&lt;/code&gt; over the delegation period.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="reflection"&gt;Reflection
+&lt;/h2&gt;&lt;p&gt;Building tools for a top-tier validator team requires a &amp;ldquo;don&amp;rsquo;t trust, verify&amp;rdquo; mindset toward protocol specifications. These articles served as the technical blueprint for our engineering team to ensure reward calculation accuracy and operational excellence.&lt;/p&gt;
+&lt;p&gt;I hope this archive remains a useful resource for anyone diving deep into the economics of Proof-of-Stake networks.&lt;/p&gt;</description></item></channel></rss>

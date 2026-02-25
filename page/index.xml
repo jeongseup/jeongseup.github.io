@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Jeongseup Blog</title><link>https://jeongseup.github.io/page/</link><description>Recent content in Pages on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 03 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About Me</title><link>https://jeongseup.github.io/about/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/about/</guid><description>&lt;h1 id="jeongseup"&gt;Jeongseup
+&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;Software Engineer (DevOps &amp;amp; Solution Engineer)&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;Blockchain Protocol Specialist, DevOps, and Solution Engineer.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;📄 &lt;a class="link" href="https://jeongseup.github.io/resume.pdf" &gt;Download Resume&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I am a Software Engineer specializing in DevOps and Solution Engineering within the blockchain industry. My expertise lies in &lt;strong&gt;Cosmos SDK&lt;/strong&gt;, &lt;strong&gt;Rust&lt;/strong&gt;, &lt;strong&gt;Go&lt;/strong&gt;, and &lt;strong&gt;TypeScript&lt;/strong&gt;. I have a strong background in infrastructure tools like &lt;strong&gt;Terraform&lt;/strong&gt; and &lt;strong&gt;Ansible&lt;/strong&gt; for managing validator nodes.&lt;/p&gt;
+&lt;h2 id="experience"&gt;Experience
+&lt;/h2&gt;&lt;h3 id="independent--freelance-sep-2025--nov-2025"&gt;Independent / Freelance (Sep 2025 – Nov 2025)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://docs.newt.foundation/" target="_blank" rel="noopener"
+&gt;Newton Protocol&lt;/a&gt;&lt;/strong&gt; (Oct 2025 – Nov 2025): Developer Advocate. Reviewed documentation and created &lt;a class="link" href="https://github.com/jeongseup/newton-developer-policy-cli" target="_blank" rel="noopener"
+&gt;stablekrw-demo&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://www.ludium.world/" target="_blank" rel="noopener"
+&gt;Ludium&lt;/a&gt;&lt;/strong&gt; (Sep 2025 – Nov 2025): Backend Engineer. Migrated Backend API V2 and developed Multi EVM Contract Relayer.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="cosmostation-april-2022--aug-2025"&gt;&lt;a class="link" href="https://cosmostation.io/" target="_blank" rel="noopener"
+&gt;Cosmostation&lt;/a&gt; (April 2022 – Aug 2025)
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Research Engineer &amp;amp; Node Ops&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Managed and operated validator nodes and clients (Cosmos, Ethereum, Sui, etc).&lt;/li&gt;
+&lt;li&gt;Developed internal ‘Validator Reward Calculator’ supporting various protocols (Sui, Walrus, Cosmos, Kaia, Namada).&lt;/li&gt;
+&lt;li&gt;Developed &lt;strong&gt;&lt;a class="link" href="https://github.com/cosmostation/cvms" target="_blank" rel="noopener"
+&gt;CVMS (Cosmos Validator Monitoring Service)&lt;/a&gt;&lt;/strong&gt;, an open-source monitoring service for the Cosmos ecosystem.&lt;/li&gt;
+&lt;li&gt;Authored the &lt;strong&gt;&lt;a class="link" href="https://jeongseup.github.io/categories/technical-research/" &gt;Validator Reward Deep Dive Series&lt;/a&gt;&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="education"&gt;Education
+&lt;/h2&gt;&lt;h3 id="incheon-national-university-mar-2015--sep-2021"&gt;Incheon National University (Mar 2015 – Sep 2021)
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;B.S. in Industrial and Management Engineering&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;GPA&lt;/strong&gt;: 4.27 / 4.5&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Honors&lt;/strong&gt;: Graduated &lt;strong&gt;Summa Cum Laude&lt;/strong&gt; (Ranked 1st in Department)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="technical-skills"&gt;Technical Skills
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Languages&lt;/strong&gt;: Go, Rust, TypeScript, Solidity, Move&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Infrastructure&lt;/strong&gt;: Terraform, Ansible, Docker, Kubernetes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CSP&lt;/strong&gt;: AWS, GCP, Vultr, Hetzner&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monitoring&lt;/strong&gt;: Grafana, Prometheus&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Contact Me</title><link>https://jeongseup.github.io/contact/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/contact/</guid><description>&lt;p&gt;You can reach me via email at &lt;a class="link" href="mailto:my-email@example.com" &gt;my-email@example.com&lt;/a&gt; or through my social media channels.&lt;/p&gt;</description></item><item><title>Education &amp; Mentorship</title><link>https://jeongseup.github.io/education/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/education/</guid><description>&lt;h2 id="education"&gt;Education &amp;amp; Mentorship
+&lt;/h2&gt;
+&lt;h3&gt;Cosmos SDK Live Instructor&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Role&lt;/strong&gt;: Instructor | Ludium&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Description&lt;/strong&gt;: Hosted &amp;#39;[Road to Dubai]&amp;#39; lecture series, teaching Cosmos SDK fundamentals to developers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Technical Writer&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Role&lt;/strong&gt;: Author&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Description&lt;/strong&gt;: Authored educational content and documentation for Cosmos SDK and CosmWasm basics.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Hackathons</title><link>https://jeongseup.github.io/hackathons/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/hackathons/</guid><description>&lt;h2 id="hackathons"&gt;Hackathon Projects
+&lt;/h2&gt;
+&lt;h3&gt;Base Batches 002 (2025)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Project&lt;/strong&gt;: &lt;code&gt;base-batch-mini-app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Track&lt;/strong&gt;: Builder Track&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Description&lt;/strong&gt;: Developed a mini-app for the Base ecosystem.&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Outsourcing</title><link>https://jeongseup.github.io/outsourcing/</link><pubDate>Sat, 03 Jan 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/outsourcing/</guid><description>&lt;h2 id="outsourcing"&gt;Outsourcing Projects
+&lt;/h2&gt;
+&lt;h3&gt;Newton Protocol PoC&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Role&lt;/strong&gt;: Outsourced Developer&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Description&lt;/strong&gt;: Developed the Proof of Concept (PoC) for the Newton Protocol and reviewed developer documentation for accuracy and usability.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Ludium Backend Renewal&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Role&lt;/strong&gt;: Backend Engineer&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Description&lt;/strong&gt;: Redesigned data schemas and developed APIs on Google Cloud Platform (GCP). Implemented a contract relayer to facilitate interaction between the backend and blockchain smart contracts.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tech Stack&lt;/strong&gt;: GCP, Go, SQL&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Archives</title><link>https://jeongseup.github.io/archives/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/archives/</guid><description/></item><item><title>Links</title><link>https://jeongseup.github.io/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/links/</guid><description>&lt;p&gt;To use this feature, add &lt;code&gt;links&lt;/code&gt; section to frontmatter.&lt;/p&gt;
+&lt;p&gt;This page&amp;rsquo;s frontmatter:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;links&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;GitHub&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;description&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;GitHub is the world&amp;#39;s largest software development platform.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;website&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://github.com&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;TypeScript&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;description&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;website&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;https://www.typescriptlang.org&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;ts-logo-128.jpg&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;image&lt;/code&gt; field accepts both local and external images.&lt;/p&gt;</description></item><item><title>Search</title><link>https://jeongseup.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/search/</guid><description/></item></channel></rss>

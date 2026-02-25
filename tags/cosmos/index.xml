@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cosmos on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/cosmos/</link><description>Recent content in Cosmos on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 13 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/cosmos/index.xml" rel="self" type="application/rss+xml"/><item><title>[Cosmos] Listed CVMS in Awesome Cosmos</title><link>https://jeongseup.github.io/contribution/cvms-launch/</link><pubDate>Wed, 13 Nov 2024 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/contribution/cvms-launch/</guid><description>&lt;h3 id="contribution-description"&gt;Contribution Description
+&lt;/h3&gt;&lt;p&gt;Successfully listed the &lt;strong&gt;Cosmos Validator Monitoring Service (CVMS)&lt;/strong&gt; in the official &lt;a class="link" href="https://github.com/cosmos/awesome-cosmos" target="_blank" rel="noopener"
+&gt;Awesome Cosmos&lt;/a&gt; repository under the Monitoring Tools section.
+This project provides a comprehensive monitoring solution for Cosmos SDK-based validators.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/cosmostation/cvms" target="_blank" rel="noopener"
+&gt;View on GitHub&lt;/a&gt;
+&lt;a class="link" href="https://github.com/cosmos/awesome-cosmos/pull/171" target="_blank" rel="noopener"
+&gt;View Pull Request&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,1274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Solidity on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/solidity/</link><description>Recent content in Solidity on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 25 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/solidity/index.xml" rel="self" type="application/rss+xml"/><item><title>BaseCard</title><link>https://jeongseup.github.io/project/basecard/</link><pubDate>Sat, 01 Nov 2025 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/basecard/</guid><description>&lt;img src="https://jeongseup.github.io/img/thumbs/project_basecard.png" alt="Featured image of post BaseCard" /&gt;&lt;h2 id="role"&gt;Role
+&lt;/h2&gt;&lt;p&gt;Founder &amp;amp; Full Stack Developer&lt;/p&gt;
+&lt;h2 id="description"&gt;Description
+&lt;/h2&gt;&lt;p&gt;Initiated BaseCard as a Farcaster miniapp during &lt;a class="link" href="https://base-batches-builder-track.devfolio.co/overview" target="_blank" rel="noopener"
+&gt;base-batches-002&lt;/a&gt;.
+Designed and led full-stack development (Backend, Miniapp, Smart Contract, Deploy Agent).&lt;/p&gt;
+&lt;h2 id="tech-stack"&gt;Tech Stack
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;NestJS&lt;/li&gt;
+&lt;li&gt;Next.js&lt;/li&gt;
+&lt;li&gt;Solidity&lt;/li&gt;
+&lt;li&gt;Foundry&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>EVM은 왜 정수(uint)만 지원하는가?</title><link>https://jeongseup.github.io/p/evm-integer-only-design/</link><pubDate>Wed, 25 Feb 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/p/evm-integer-only-design/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;Solidity에 float이 없는 이유와 블록체인 합의의 관계&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="핵심-이유-부동소수점은-합의를-깨뜨린다"&gt;핵심 이유: 부동소수점은 합의를 깨뜨린다
+&lt;/h2&gt;&lt;p&gt;블록체인은 수천 개 노드가 동일한 계산을 수행하고 &lt;strong&gt;같은 결과에 합의&lt;/strong&gt;해야 하는 시스템이다.&lt;/p&gt;
+&lt;p&gt;그런데 IEEE 754 부동소수점(&lt;code&gt;float&lt;/code&gt;/&lt;code&gt;double&lt;/code&gt;)은 하드웨어마다 미세하게 다른 결과를 낼 수 있다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0.1 + 0.2 =
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node A (Intel x86): 0.30000000000000004
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node B (ARM Cortex): 0.30000000000000001
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; Node C (AMD Ryzen): 0.30000000000000004
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ A와 C는 같은 상태 해시, B는 다른 상태 해시
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 합의 실패 → 체인 포크!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;반면 정수 연산은 어떤 CPU에서든 동일하다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;800 * 1e18 / 1000 = 800000000000000000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 100% 결정론적(deterministic) → 합의 보장
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="이유-1-결정론determinism--가장-근본적"&gt;이유 1: 결정론(Determinism) — 가장 근본적
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;float&lt;/code&gt;이 비결정론적인 구체적 원인들을 살펴보자.&lt;/p&gt;
+&lt;h3 id="반올림-모드-차이"&gt;반올림 모드 차이
+&lt;/h3&gt;&lt;p&gt;IEEE 754에는 4가지 반올림 모드가 있다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Round to nearest (even)&lt;/strong&gt; — 기본값이지만 바꿀 수 있음&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward zero&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward +∞&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Round toward -∞&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CPU나 컴파일러 설정에 따라 모드가 달라질 수 있다.&lt;/p&gt;
+&lt;h3 id="비결합법칙-non-associativity"&gt;비결합법칙 (Non-associativity)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;정수: (a + b) + c = a + (b + c) ← 항상 같음
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;float: (a + b) + c ≠ a + (b + c) ← 다를 수 있음!
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;예를 들어 &lt;code&gt;a=1e20, b=-1e20, c=1.0&lt;/code&gt;일 때:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;(a + b) + c = 0 + 1.0 = 1.0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;a + (b + c) = 1e20 + (-1e20) = 0.0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;컴파일러 최적화가 연산 순서를 바꾸면 결과가 달라진다.&lt;/p&gt;
+&lt;h3 id="특수값-처리-차이"&gt;특수값 처리 차이
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;NaN&lt;/code&gt;, &lt;code&gt;Infinity&lt;/code&gt;, &lt;code&gt;-0&lt;/code&gt;, denormalized numbers 등 특수값들의 비교·연산 동작이 구현마다 미세하게 다르다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="이유-2-금융-정밀도--float은-돈-계산에-위험"&gt;이유 2: 금융 정밀도 — float은 돈 계산에 위험
+&lt;/h2&gt;&lt;p&gt;은행도 &lt;code&gt;float&lt;/code&gt;을 쓰지 않는다:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;시스템&lt;/th&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;COBOL&lt;/td&gt;
+&lt;td&gt;고정소수점 (packed decimal)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Java&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;BigDecimal&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Python&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;decimal&lt;/code&gt; 모듈&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;블록체인&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;uint256&lt;/code&gt; + 1e18 스케일링&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;code&gt;float&lt;/code&gt;의 위험을 구체적으로 보면:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;잔고 100.10 USDC를 float로 저장하면?
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 실제 저장값: 100.09999999999999...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 100만 번 더하기/빼기 반복하면 오차 누적
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 잔고 불일치 → 자금 손실 또는 무한 인출 취약점
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;uint256&lt;/code&gt; + PRECISION 방식:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;100.10 USDC = 100_100_000 (USDC는 6 decimals)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;→ 정확히 이 값. 오차 없음. 1000만 번 연산해도 동일.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="이유-3-evm-설계-단순화"&gt;이유 3: EVM 설계 단순화
+&lt;/h2&gt;&lt;p&gt;EVM은 &lt;strong&gt;256비트 워드 기반 스택 머신&lt;/strong&gt;이다. &lt;code&gt;uint256&lt;/code&gt; 하나로 통일하면:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;장점&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Opcode 수 적음 (&lt;code&gt;ADD&lt;/code&gt;, &lt;code&gt;MUL&lt;/code&gt;, &lt;code&gt;DIV&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;가스 비용 계산 간단 (고정 비용)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;구현 버그 감소&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;상태 저장 단순 (32 bytes 슬롯)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;만약 &lt;code&gt;float&lt;/code&gt;을 추가한다면:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;추가 복잡도&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;FADD&lt;/code&gt;, &lt;code&gt;FMUL&lt;/code&gt;, &lt;code&gt;FDIV&lt;/code&gt;, &lt;code&gt;FSQRT&lt;/code&gt; opcode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;반올림 모드 명세&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;NaN&lt;/code&gt;, &lt;code&gt;Infinity&lt;/code&gt;, &lt;code&gt;-0&lt;/code&gt; 처리 규칙&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;가스 비용 산정 (연산마다 다름)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;int↔float&lt;/code&gt; 변환 opcode&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;모든 EVM 구현체의 동작 일치 검증&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;복잡도 대비 이점이 없다. 정수 스케일링으로 충분하기 때문이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="다른-블록체인도-마찬가지인가"&gt;다른 블록체인도 마찬가지인가?
+&lt;/h2&gt;&lt;p&gt;L2도 &lt;code&gt;float&lt;/code&gt;을 명시적으로 제거한다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Optimism (Bedrock)&lt;/strong&gt;: float 연산 제외 — fraud proof 검증을 위해&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Arbitrum Nitro&lt;/strong&gt;: float 연산 제외 — 동일한 이유&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;다른 체인들도 마찬가지다:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;체인&lt;/th&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Solana (BPF)&lt;/td&gt;
+&lt;td&gt;정수 연산만 지원, float는 프로그램 레벨에서 처리&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Cosmos (CosmWasm)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Decimal256&lt;/code&gt; 타입 제공 (uint 기반 구현)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Move (Sui/Aptos)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;u8&lt;/code&gt;/&lt;code&gt;u64&lt;/code&gt;/&lt;code&gt;u128&lt;/code&gt;/&lt;code&gt;u256&lt;/code&gt;만 지원, float 없음&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;블록체인 VM에서 float 배제는 업계 표준&lt;/strong&gt;이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="defi의-우회-방법들"&gt;DeFi의 우회 방법들
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;float&lt;/code&gt; 없이 소수점을 다루는 방법들:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;방식&lt;/th&gt;
+&lt;th&gt;사용 사례&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;1e18 (Mantissa)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Compound — 범용 비율 계산&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;1e27 (Ray)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Aave V3 — 더 높은 정밀도 필요 시&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;2^96 (Q notation)&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Uniswap V3 — 제곱근 가격 계산 최적화&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Token decimals&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;USDC(6), WETH(18) — 토큰 단위 표현&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;WAD/RAY 라이브러리&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;ds-math, WadRayMath — 안전한 연산&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;공통 패턴: &lt;strong&gt;&amp;ldquo;정수로 표현하고, 나눗셈은 최대한 늦추고, 곱셈을 먼저&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="결론"&gt;결론
+&lt;/h2&gt;&lt;p&gt;EVM이 &lt;code&gt;uint&lt;/code&gt;만 지원하는 이유를 우선순위로 정리하면:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;합의 안전성&lt;/strong&gt; — float은 노드 간 결과 차이를 만들 수 있음&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;금융 정확성&lt;/strong&gt; — 돈 계산에 부동소수점은 위험&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;설계 단순성&lt;/strong&gt; — opcode와 가스 모델 복잡도 최소화&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이것은 **&amp;ldquo;기술적 한계&amp;quot;가 아니라 &amp;ldquo;의도적 설계 결정&amp;rdquo;**이다.&lt;/p&gt;
+&lt;p&gt;분산 합의가 필요 없는 시스템(게임 엔진, 과학 계산)에서는 float이 적합하지만, &lt;strong&gt;&amp;ldquo;수천 대 컴퓨터가 같은 답을 내야 하는&amp;rdquo; 블록체인에서는 정수가 유일한 선택&lt;/strong&gt;이다.&lt;/p&gt;</description></item><item><title>Lending Protocol Study Day 2: Compound V2 Deep Dive와 Aave V3 아키텍처</title><link>https://jeongseup.github.io/p/lending-protocol-study-day2/</link><pubDate>Wed, 25 Feb 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/p/lending-protocol-study-day2/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;7일간의 DeFi Lending Protocol 스터디 시리즈. Day 2에서는 Compound V2의 내부 구조를 코드 레벨로 파고들고, 렌딩 프로토콜의 3가지 유형을 분류한 뒤, Aave V3의 아키텍처 진화를 분석한다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Repository:&lt;/strong&gt; &lt;a class="link" href="https://github.com/jeongseup/lending-protocol-study" target="_blank" rel="noopener"
+&gt;jeongseup/lending-protocol-study&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="day-2-목표"&gt;Day 2 목표
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Compound V2의 CToken 상속 구조와 &lt;strong&gt;&amp;ldquo;Fresh&amp;rdquo; 패턴&lt;/strong&gt;을 코드 레벨로 이해한다&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mantissa&lt;/strong&gt; 기반 고정소수점 연산과 &lt;strong&gt;Lazy Interest Accrual&lt;/strong&gt; 메커니즘을 파악한다&lt;/li&gt;
+&lt;li&gt;렌딩 프로토콜을 &lt;strong&gt;3가지 유형&lt;/strong&gt;(Pool-based, CDP-based, Fixed-rate)으로 분류한다&lt;/li&gt;
+&lt;li&gt;Aave V3의 &lt;strong&gt;비트맵 스토리지 최적화&lt;/strong&gt;와 아키텍처 진화를 분석한다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="compound-v2-deep-dive-ctoken-상속-구조"&gt;Compound V2 Deep Dive: CToken 상속 구조
+&lt;/h2&gt;&lt;p&gt;Day 1에서 Compound V2의 핵심 파일 3개를 언급했다. Day 2에서는 CToken의 &lt;strong&gt;상속 구조&lt;/strong&gt;부터 파고든다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;CTokenInterface (인터페이스)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └─ CToken (핵심 로직)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ├─ CErc20 (ERC20 자산용 - USDC, DAI 등)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └─ CEther (ETH 전용)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;CErc20&lt;/code&gt;과 &lt;code&gt;CEther&lt;/code&gt;의 차이는 단순하다. ETH는 ERC20이 아니라 &lt;code&gt;msg.value&lt;/code&gt;로 받아야 하므로, 자금 수수 로직만 다르고 &lt;strong&gt;핵심 렌딩 로직은 CToken에 모두 있다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;중요한 건 CToken이 &lt;strong&gt;풀 역할까지 겸한다&lt;/strong&gt;는 점이다. &lt;code&gt;mint()&lt;/code&gt;, &lt;code&gt;borrow()&lt;/code&gt;, &lt;code&gt;repay()&lt;/code&gt;, &lt;code&gt;liquidate()&lt;/code&gt; 모두 CToken 컨트랙트에 있다. 하나의 컨트랙트가 ERC20 토큰이면서 동시에 렌딩 풀인 &lt;strong&gt;Monolithic 구조&lt;/strong&gt;다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="fresh-패턴-이자부터-정산하고-본론으로"&gt;Fresh 패턴: &amp;ldquo;이자부터 정산하고 본론으로&amp;rdquo;
+&lt;/h2&gt;&lt;p&gt;Compound V2의 모든 핵심 함수 이름에 &lt;code&gt;Fresh&lt;/code&gt;가 붙어 있다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;mintFresh&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;minter&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;mintAmount&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;borrowFresh&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="k"&gt;payable&lt;/span&gt; &lt;span class="n"&gt;borrower&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;borrowAmount&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;repayBorrowFresh&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;payer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;borrower&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;repayAmount&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;liquidateBorrowFresh&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;liquidator&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;borrower&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;왜 &lt;code&gt;Fresh&lt;/code&gt;일까? **&amp;ldquo;이자를 최신 상태로 정산한 뒤에 핵심 로직을 실행한다&amp;rdquo;**는 패턴이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;mint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;mintAmount&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;external&lt;/span&gt; &lt;span class="k"&gt;returns&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;uint&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;accrueInterest&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt; &lt;span class="c1"&gt;// 1. 이자 먼저 정산
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;mintFresh&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;msg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;sender&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;mintAmount&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 2. 그 다음 본론
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;모든 external 함수가 이 패턴을 따른다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;사용자 호출 → accrueInterest() → xxxFresh() → 실제 로직
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;이렇게 하는 이유는 간단하다. 이자 계산은 &lt;strong&gt;마지막 업데이트 이후의 블록 수&lt;/strong&gt;에 기반한다. 이자를 정산하지 않고 &lt;code&gt;mint()&lt;/code&gt;을 실행하면, 기존 예치자들의 교환비율이 부정확한 상태에서 새로운 지분이 발행되어 &lt;strong&gt;기존 예치자가 손해를 본다.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="mantissa-solidity의-소수점-해법"&gt;Mantissa: Solidity의 소수점 해법
+&lt;/h2&gt;&lt;p&gt;Solidity에는 부동소수점이 없다. Compound V2는 이를 &lt;strong&gt;Mantissa&lt;/strong&gt; 방식으로 해결한다.&lt;/p&gt;
+$$\text{Mantissa} = \text{실제값} \times 10^{18}$$&lt;p&gt;예를 들어:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;이자율 5% → &lt;code&gt;0.05 × 10^18 = 50000000000000000&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;교환비율 0.02 → &lt;code&gt;0.02 × 10^18 = 20000000000000000&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;곱셈과 나눗셈 시 스케일링을 맞춰야 한다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 두 Mantissa 값의 곱셈: 결과를 10^18으로 나눠서 스케일 복원
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;mulScalar&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exp&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;scalar&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;pure&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="k"&gt;returns&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exp&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;Exp&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="n"&gt;mantissa&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mantissa&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;scalar&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;mulExp&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exp&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Exp&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;pure&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="k"&gt;returns&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exp&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;Exp&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;&lt;span class="n"&gt;mantissa&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mantissa&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mantissa&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;e18&lt;/span&gt;&lt;span class="p"&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;이 패턴은 Compound만의 것이 아니다. Aave의 &lt;code&gt;RAY(10^27)&lt;/code&gt;, Uniswap V3의 &lt;code&gt;Q96(2^96)&lt;/code&gt;, MakerDAO의 &lt;code&gt;WAD(10^18)&lt;/code&gt; 모두 같은 원리다. &lt;strong&gt;정수로 소수점을 표현하기 위한 고정소수점 연산.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="lazy-interest-accrual-이자는-필요할-때만-계산한다"&gt;Lazy Interest Accrual: 이자는 &amp;ldquo;필요할 때만&amp;rdquo; 계산한다
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;accrueInterest()&lt;/code&gt;는 매 블록마다 자동으로 실행되는 게 아니다. &lt;strong&gt;누군가 트랜잭션을 보낼 때만&lt;/strong&gt; 실행된다. 이것이 &lt;strong&gt;Lazy Evaluation&lt;/strong&gt;이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 100: Alice가 mint() → accrueInterest() 실행 (블록 0~100 이자 계산)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 200: 아무 일 없음 → 이자 계산 안 함
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 300: Bob이 borrow() → accrueInterest() 실행 (블록 100~300 이자 계산)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;200 블록 동안 아무도 상호작용하지 않으면, 200 블록치의 이자가 한번에 계산된다. 가스비는 &lt;strong&gt;트랜잭션 수가 아니라 상호작용 빈도에 비례&lt;/strong&gt;한다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;accrueInterest()&lt;/code&gt;가 업데이트하는 상태 변수는 딱 &lt;strong&gt;4개&lt;/strong&gt;다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="n"&gt;totalBorrows&lt;/span&gt; &lt;span class="c1"&gt;// 총 대출량 (이자 포함)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="n"&gt;totalReserves&lt;/span&gt; &lt;span class="c1"&gt;// 프로토콜 수익 누적
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="n"&gt;borrowIndex&lt;/span&gt; &lt;span class="c1"&gt;// 대출자 이자 추적용 전역 인덱스
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="n"&gt;accrualBlockNumber&lt;/span&gt; &lt;span class="c1"&gt;// 마지막 이자 정산 블록 번호
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;4개의 &lt;code&gt;SSTORE&lt;/code&gt; = 20,000 gas. 사용자 수가 아무리 많아도 이 비용은 고정이다. 이것이 Day 1에서 설명한 &lt;strong&gt;Scaled Balance 패턴&lt;/strong&gt;의 실제 구현이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="이자-시나리오-시뮬레이션"&gt;이자 시나리오 시뮬레이션
+&lt;/h2&gt;&lt;p&gt;구체적인 숫자로 따라가보자.&lt;/p&gt;
+&lt;h3 id="초기-상태"&gt;초기 상태
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 0: Pool에 10,000 USDC
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- totalCash = 10,000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- totalBorrows = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- totalReserves = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- borrowIndex = 1.0 (1e18)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- exchangeRate = 10,000 / 500,000 = 0.02 (cToken 500,000개 발행 가정)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="alice가-1000-usdc-대출"&gt;Alice가 1,000 USDC 대출
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 100: Alice borrow(1,000)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- accrueInterest() 실행 (totalBorrows = 0이므로 이자 없음)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- totalCash = 9,000 (1,000 빠짐)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- totalBorrows = 1,000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- Alice의 borrowSnapshot = {principal: 1,000, interestIndex: 1.0}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="100블록-후-이자-정산"&gt;100블록 후 이자 정산
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록 200: Bob이 mint() 호출
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- 이자율: borrowRate = 0.0001/블록 (연 약 5.3%)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- 경과 블록: 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- simpleInterestFactor = 0.0001 × 100 = 0.01
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- 새 totalBorrows = 1,000 × 1.01 = 1,010
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- Reserve Factor 10%: 새 totalReserves = 10 × 0.1 = 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- 새 borrowIndex = 1.0 × 1.01 = 1.01
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Alice의 실제 대출 잔액은?&lt;/p&gt;
+$$\text{Alice 대출잔액} = \frac{\text{principal} \times \text{현재 borrowIndex}}{\text{Alice의 interestIndex}} = \frac{1{,}000 \times 1.01}{1.0} = 1{,}010 \text{ USDC}$$&lt;p&gt;Alice의 Storage를 건드리지 않고도 &lt;strong&gt;전역 borrowIndex 하나만으로&lt;/strong&gt; 정확한 잔액을 계산했다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="렌딩-프로토콜의-3가지-유형"&gt;렌딩 프로토콜의 3가지 유형
+&lt;/h2&gt;&lt;p&gt;Day 1에서는 Pool-based 모델만 다뤘다. 실제로 렌딩 프로토콜은 &lt;strong&gt;자금 조달 방식&lt;/strong&gt;에 따라 3가지로 분류된다.&lt;/p&gt;
+&lt;h3 id="1-pool-based-compound-aave"&gt;1. Pool-based (Compound, Aave)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;예치자 → [Pool] → 차입자
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;기존 예치금&lt;/strong&gt;에서 대출&lt;/li&gt;
+&lt;li&gt;예치자가 없으면 빌릴 수 없다&lt;/li&gt;
+&lt;li&gt;이자율은 Utilization Rate에 연동&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2-cdp-based-makerdao"&gt;2. CDP-based (MakerDAO)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;사용자 → [Vault] → 새 DAI 발행
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;프로토콜이 &lt;strong&gt;새 토큰을 발행&lt;/strong&gt; (mint)&lt;/li&gt;
+&lt;li&gt;예치자 없이도 대출 가능&lt;/li&gt;
+&lt;li&gt;Stability Fee(이자)는 거버넌스가 결정&lt;/li&gt;
+&lt;li&gt;CDP = Collateralized Debt Position&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="3-fixed-rate-yield-protocol"&gt;3. Fixed-rate (Yield Protocol)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;사용자 → fyToken (만기 시 1:1 교환 가능)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;할인된 미래 가치 토큰&lt;/strong&gt; 매매&lt;/li&gt;
+&lt;li&gt;0.95 fyUSDC를 사면, 만기에 1 USDC → 약 5% 고정 금리&lt;/li&gt;
+&lt;li&gt;이자율이 트레이딩으로 결정&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="비교-정리"&gt;비교 정리
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;특성&lt;/th&gt;
+&lt;th&gt;Pool-based&lt;/th&gt;
+&lt;th&gt;CDP-based&lt;/th&gt;
+&lt;th&gt;Fixed-rate&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;자금 출처&lt;/td&gt;
+&lt;td&gt;예치자&lt;/td&gt;
+&lt;td&gt;프로토콜 발행&lt;/td&gt;
+&lt;td&gt;시장 매매&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;이자율 결정&lt;/td&gt;
+&lt;td&gt;알고리즘 (사용률)&lt;/td&gt;
+&lt;td&gt;거버넌스 투표&lt;/td&gt;
+&lt;td&gt;시장 수급&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;변동/고정&lt;/td&gt;
+&lt;td&gt;변동&lt;/td&gt;
+&lt;td&gt;반고정&lt;/td&gt;
+&lt;td&gt;고정&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;대표&lt;/td&gt;
+&lt;td&gt;Compound, Aave&lt;/td&gt;
+&lt;td&gt;MakerDAO&lt;/td&gt;
+&lt;td&gt;Yield, Notional&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;필요 조건&lt;/td&gt;
+&lt;td&gt;유동성 공급자&lt;/td&gt;
+&lt;td&gt;없음 (mint)&lt;/td&gt;
+&lt;td&gt;만기 매칭&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;대부분의 메이저 프로토콜이 Pool-based인 이유: &lt;strong&gt;구현이 단순하고, 유동성이 자연스럽게 형성&lt;/strong&gt;되기 때문이다. CDP는 토큰 경제 설계가 복잡하고, Fixed-rate는 만기 매칭이 어렵다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="aave-v3-아키텍처-compound에서-무엇이-진화했나"&gt;Aave V3 아키텍처: Compound에서 무엇이 진화했나
+&lt;/h2&gt;&lt;p&gt;Compound V2는 CToken이 모든 걸 한다. Aave V3는 이를 &lt;strong&gt;분리&lt;/strong&gt;했다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Compound V2:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 사용자 → CToken.mint() (CToken = 풀 + 토큰)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Aave V3:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 사용자 → Pool.supply() (Pool = 라우터)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → SupplyLogic.executeSupply() (Library = 실제 로직)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → aToken.mint() (aToken = 순수 영수증)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="delegatecall--library-패턴"&gt;delegatecall + Library 패턴
+&lt;/h3&gt;&lt;p&gt;Aave V3의 &lt;code&gt;Pool.sol&lt;/code&gt;은 얇은 프록시에 가깝다. 실제 로직은 &lt;strong&gt;Library&lt;/strong&gt; 컨트랙트에 있다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Pool.sol
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;supply&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;asset&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;amount&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...)&lt;/span&gt; &lt;span class="k"&gt;external&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;SupplyLogic&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;executeSupply&lt;/span&gt;&lt;span class="p"&gt;(...);&lt;/span&gt; &lt;span class="c1"&gt;// delegatecall로 Library 호출
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;borrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;asset&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;amount&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...)&lt;/span&gt; &lt;span class="k"&gt;external&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;BorrowLogic&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;executeBorrow&lt;/span&gt;&lt;span class="p"&gt;(...);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Library를 쓰면:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;코드 크기 제한(24KB)&lt;/strong&gt; 회피 - Pool의 로직이 아무리 커도 Library에 분산&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;관심사 분리&lt;/strong&gt; - Supply, Borrow, Liquidation 로직이 독립적으로 관리&lt;/li&gt;
+&lt;li&gt;단, Library는 &lt;strong&gt;독립 배포 후 업그레이드 불가&lt;/strong&gt; - Proxy 패턴과 조합하여 해결&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="debt-tokenization"&gt;Debt Tokenization
+&lt;/h3&gt;&lt;p&gt;Compound V2에서 대출은 단순 매핑이다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Compound V2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;BorrowSnapshot&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;accountBorrows&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Aave V3는 대출도 &lt;strong&gt;토큰화&lt;/strong&gt;했다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Aave V3
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="n"&gt;variableDebtToken&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;borrower&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;amount&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 대출하면 부채 토큰 발행
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="n"&gt;variableDebtToken&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;burn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;borrower&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;amount&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 상환하면 부채 토큰 소각
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;부채를 토큰화하면 무엇이 좋은가?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;balanceOf()&lt;/code&gt;로 대출 잔액 조회 가능 (표준 인터페이스)&lt;/li&gt;
+&lt;li&gt;Transfer 제한으로 부채 이전 방지&lt;/li&gt;
+&lt;li&gt;이벤트 표준화 (Transfer 이벤트로 대출/상환 추적 가능)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Aave V3.2부터 Stable Rate이 제거되었다. 변동금리만 남았으므로 &lt;code&gt;stableDebtToken&lt;/code&gt;은 더 이상 사용되지 않는다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="비트맵-스토리지-최적화"&gt;비트맵 스토리지 최적화
+&lt;/h2&gt;&lt;p&gt;Day 2의 가장 중요한 기술적 발견이다. Compound V2와 Aave V3의 &lt;strong&gt;사용자 상태 관리 방식&lt;/strong&gt;이 근본적으로 다르다.&lt;/p&gt;
+&lt;h3 id="compound-v2-배열-순회"&gt;Compound V2: 배열 순회
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Comptroller.sol
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;CToken&lt;/span&gt;&lt;span class="p"&gt;[])&lt;/span&gt; &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="n"&gt;accountAssets&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="c1"&gt;// 사용자별 참여 마켓 배열
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// Health Factor 계산 시
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;uint&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;assets&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;// 모든 마켓을 순회하며 담보 가치 합산
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;문제: 사용자가 참여한 마켓이 많을수록 &lt;strong&gt;가스비가 선형으로 증가&lt;/strong&gt;한다.&lt;/p&gt;
+&lt;h3 id="aave-v3-비트맵"&gt;Aave V3: 비트맵
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 하나의 uint256에 128개 자산의 상태를 담는다
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 각 자산이 2비트를 차지: [담보 사용 여부][대출 여부]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;UserConfigurationMap&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;_usersConfig&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;struct&lt;/span&gt; &lt;span class="nc"&gt;UserConfigurationMap&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="nb"&gt;data&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="c1"&gt;// 256비트 = 128개 자산 × 2비트
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;비트맵의 구조:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;비트 위치: ... | 5 | 4 | 3 | 2 | 1 | 0 |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;자산 ID: | 2 | 1 | 0 |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;의미: ... | C | B | C | B | C | B |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; B = Borrowing (대출 중)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; C = Collateral (담보로 사용 중)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Health Factor 계산 시:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;// 비트맵에서 해당 비트가 0이면 스킵
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;userConfig&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;data&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;reserveIndex&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;continue&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="c1"&gt;// 이 자산은 대출도 담보도 아님 → O(1)로 스킵
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="성능-비교"&gt;성능 비교
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Compound V2 (배열):
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 10개 마켓 참여 → 10번 SLOAD + 루프 = ~50,000 gas
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Aave V3 (비트맵):
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 128개 마켓 확인 → 1번 SLOAD + 비트 연산 = ~2,100 gas
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;비트 연산(&lt;code&gt;AND&lt;/code&gt;, &lt;code&gt;SHIFT&lt;/code&gt;)은 3 gas다. 128개 자산을 확인해도 &lt;code&gt;2,100 + 128 × 3 = 2,484 gas&lt;/code&gt;. 배열 방식 대비 &lt;strong&gt;약 20배 절약&lt;/strong&gt;이다.&lt;/p&gt;
+&lt;p&gt;이 차이가 결정적인 이유: Health Factor 계산은 &lt;strong&gt;모든 트랜잭션에서 발생&lt;/strong&gt;한다. supply, borrow, repay, liquidate 전부. 가장 빈번하게 호출되는 로직의 가스를 20배 줄이면 프로토콜 전체의 가스 효율이 극적으로 개선된다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="lendingpool-리팩토링-배운-것을-적용하기"&gt;LendingPool 리팩토링: 배운 것을 적용하기
+&lt;/h2&gt;&lt;p&gt;스터디 프로젝트의 &lt;code&gt;LendingPool.sol&lt;/code&gt;에 Aave V3의 PoolStorage 패턴을 적용했다.&lt;/p&gt;
+&lt;h3 id="before-단순-매핑"&gt;Before: 단순 매핑
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="n"&gt;deposits&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="n"&gt;borrows&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="after-구조화된-스토리지"&gt;After: 구조화된 스토리지
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;struct&lt;/span&gt; &lt;span class="nc"&gt;ReserveData&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;liquidityIndex&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;variableBorrowIndex&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;currentLiquidityRate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;currentVariableBorrowRate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint40&lt;/span&gt; &lt;span class="n"&gt;lastUpdateTimestamp&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint16&lt;/span&gt; &lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;aTokenAddress&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="n"&gt;variableDebtTokenAddress&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;totalDeposits&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint128&lt;/span&gt; &lt;span class="n"&gt;totalBorrows&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ReserveData&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;_reserves&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="kt"&gt;address&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;_reservesList&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kt"&gt;uint16&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;_reservesCount&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;mapping&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;address&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;UserConfigurationMap&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;_usersConfig&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;핵심 변경점:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;_reserves&lt;/code&gt;: 자산 주소 → ReserveData 매핑 (모든 자산 상태를 하나의 구조체로)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;_reservesList&lt;/code&gt;: reserveId → 자산 주소 매핑 (비트맵 인덱싱용)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;_usersConfig&lt;/code&gt;: 사용자별 비트맵 (담보/대출 상태)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;비트맵 헬퍼도 구현했다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;isUsingAsCollateral&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UserConfigurationMap&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;reserveIndex&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="k"&gt;pure&lt;/span&gt; &lt;span class="k"&gt;returns&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;data&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;reserveIndex&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;isBorrowing&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UserConfigurationMap&lt;/span&gt; &lt;span class="k"&gt;memory&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;reserveIndex&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="k"&gt;pure&lt;/span&gt; &lt;span class="k"&gt;returns&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;data&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;reserveIndex&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;리팩토링 후 모든 62개 테스트(기존 61 + 비트맵 테스트 1)가 통과했다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="jumpratemodel-테스트-fuzz-testing까지"&gt;JumpRateModel 테스트: Fuzz Testing까지
+&lt;/h2&gt;&lt;p&gt;Day 1에서 이론으로 다룬 JumpRateModel을 실제로 구현하고 테스트했다.&lt;/p&gt;
+&lt;h3 id="unit-test-18개-케이스"&gt;Unit Test: 18개 케이스
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PASS] testGetBorrowRate_ZeroUtilization()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PASS] testGetBorrowRate_AtKink()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PASS] testGetBorrowRate_AboveKink()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PASS] testGetBorrowRate_FullUtilization()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;[PASS] testGetSupplyRate_WithReserveFactor()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;... (18개 전부 통과)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="fuzz-test-6개-케이스"&gt;Fuzz Test: 6개 케이스
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-solidity" data-lang="solidity"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nf"&gt;testFuzz_BorrowRateMonotonicity&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;util1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;util2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;util1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bound&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;util1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;e18&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;util2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;bound&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;util2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;util1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;e18&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;rate1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBorrowRate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cash1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;borrows1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;reserves1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kt"&gt;uint256&lt;/span&gt; &lt;span class="n"&gt;rate2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getBorrowRate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cash2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;borrows2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;reserves2&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="n"&gt;assertGe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rate2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;rate1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt; &lt;span class="c1"&gt;// 사용률이 높으면 이자율도 높아야 한다
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Fuzz Testing으로 검증한 불변 조건:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;단조 증가&lt;/strong&gt;: 사용률이 올라가면 이자율도 올라간다&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Supply ≤ Borrow&lt;/strong&gt;: Supply Rate은 항상 Borrow Rate 이하&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kink에서의 연속성&lt;/strong&gt;: kink 전후로 이자율이 비연속적으로 뛰지 않는다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;전체 24개 테스트 (18 unit + 6 fuzz) 모두 통과.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="day-2-핵심-인사이트-정리"&gt;Day 2 핵심 인사이트 정리
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Fresh 패턴은 렌딩의 정합성을 보장한다&lt;/strong&gt; - 이자를 먼저 정산하지 않으면 교환비율이 부정확해져서 기존 사용자가 손해본다. &amp;ldquo;이자부터, 그 다음 본론&amp;quot;이 원칙.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Lazy Interest Accrual은 가스 효율의 핵심&lt;/strong&gt; - 매 블록이 아니라 트랜잭션이 발생할 때만 이자를 계산한다. 4개의 SSTORE로 전체 사용자의 이자를 한번에 정산.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;렌딩은 3가지 유형&lt;/strong&gt; - Pool-based(예치금에서 빌림), CDP-based(새 토큰 발행), Fixed-rate(할인 토큰). 대부분이 Pool-based인 이유는 구현 단순성과 유동성 형성의 용이함.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;비트맵이 아키텍처를 결정한다&lt;/strong&gt; - Compound의 배열 vs Aave의 비트맵. 한 번의 SLOAD로 128개 자산 상태를 확인하는 것은 단순한 최적화가 아니라, Health Factor 계산이 모든 트랜잭션에서 발생하기 때문에 &lt;strong&gt;프로토콜 전체 가스 효율&lt;/strong&gt;을 좌우한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Storage 레이아웃이 아키텍처를 결정한다&lt;/strong&gt; - Compound는 배열 중심이라 Monolithic이 자연스럽고, Aave는 비트맵 + 구조체 중심이라 Modular가 자연스럽다. 데이터 구조가 코드 구조를 결정한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id="next-day-3"&gt;Next: Day 3
+&lt;/h2&gt;&lt;p&gt;내일은 &lt;strong&gt;청산(Liquidation) 메커니즘&lt;/strong&gt;을 파고든다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;청산 트리거 조건과 &lt;code&gt;liquidateBorrowFresh()&lt;/code&gt; 코드 리딩&lt;/li&gt;
+&lt;li&gt;청산 보너스(Liquidation Incentive) 경제학&lt;/li&gt;
+&lt;li&gt;Foundry Fork Testing으로 Aave V3 메인넷 청산 시뮬레이션&lt;/li&gt;
+&lt;li&gt;고급 Foundry 테스팅 패턴 (invariant, fork)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;이 시리즈의 전체 코드와 학습 자료는 &lt;a class="link" href="https://github.com/jeongseup/lending-protocol-study" target="_blank" rel="noopener"
+&gt;lending-protocol-study&lt;/a&gt; 레포에서 확인할 수 있다.&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Lending Protocol Study Day 1: DeFi 렌딩의 핵심 개념과 아키텍처</title><link>https://jeongseup.github.io/p/lending-protocol-study-day1/</link><pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/p/lending-protocol-study-day1/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;7일간의 DeFi Lending Protocol 스터디 시리즈. 백엔드/인프라 엔지니어 관점에서 렌딩 프로토콜을 코드 레벨까지 파헤친다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Repository:&lt;/strong&gt; &lt;a class="link" href="https://github.com/jeongseup/lending-protocol-study" target="_blank" rel="noopener"
+&gt;jeongseup/lending-protocol-study&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="why-lending-protocol"&gt;Why Lending Protocol?
+&lt;/h2&gt;&lt;p&gt;블록체인 인프라 엔지니어로 일하면서 노드 운영, 밸리데이터 모니터링, 스테이킹 보상 분석 등을 해왔다. 그런데 DeFi의 가장 큰 축인 &lt;strong&gt;렌딩 프로토콜&lt;/strong&gt;은 &amp;ldquo;대충 알겠는데 코드 레벨에서는 모른다&amp;quot;는 상태였다.&lt;/p&gt;
+&lt;p&gt;이번 스터디의 목표는 명확하다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Compound V2 / Aave V3의 핵심 로직을 &lt;strong&gt;코드로 읽고 구현&lt;/strong&gt;한다&lt;/li&gt;
+&lt;li&gt;렌딩의 수학적 모델(이자율, 청산, Health Factor)을 &lt;strong&gt;공식 수준&lt;/strong&gt;으로 이해한다&lt;/li&gt;
+&lt;li&gt;Solidity + Go 모니터링 도구까지 만들어 &lt;strong&gt;실무에 적용 가능한 수준&lt;/strong&gt;으로 올린다&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="렌딩-프로토콜의-본질-풀-기반-중개"&gt;렌딩 프로토콜의 본질: 풀 기반 중개
+&lt;/h2&gt;&lt;p&gt;전통 금융의 대출은 대출자와 차입자를 1:1로 매칭한다. DeFi 렌딩은 다르다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;전통 금융: Alice → [은행] → Bob (1:1 매칭)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;DeFi 렌딩: Alice → [Pool] ← Bob (풀 기반 간접 매칭)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;예치자들이 자산을 풀에 넣으면, 차입자들이 담보를 걸고 풀에서 빌려간다. &lt;strong&gt;아무도 누가 누구에게 빌려줬는지 모른다.&lt;/strong&gt; 이자율은 풀의 사용률(Utilization Rate)에 따라 알고리즘이 자동으로 결정한다.&lt;/p&gt;
+&lt;p&gt;이 구조의 핵심 이유는 간단하다:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;블록체인 = 익명 → 신용평가 불가 → 담보로만 판단 → 과담보 필수
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;신용이 없으니 담보로 대체한다. 그래서 DeFi 렌딩은 태생적으로 &lt;strong&gt;과담보(Over-collateralized)&lt;/strong&gt; 구조다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="렌딩의-5대-핵심-파라미터"&gt;렌딩의 5대 핵심 파라미터
+&lt;/h2&gt;&lt;p&gt;렌딩 프로토콜을 이해하려면 이 5가지 숫자만 확실히 알면 된다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;파라미터&lt;/th&gt;
+&lt;th&gt;의미&lt;/th&gt;
+&lt;th&gt;일반적 범위&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;LTV&lt;/strong&gt; (Loan-to-Value)&lt;/td&gt;
+&lt;td&gt;담보 대비 얼마까지 빌릴 수 있나&lt;/td&gt;
+&lt;td&gt;75-80%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Health Factor&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;내 포지션이 안전한가 (&amp;lt; 1이면 청산)&lt;/td&gt;
+&lt;td&gt;1.0 이상 유지&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Utilization Rate&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;풀의 자금 중 얼마가 빌려졌나&lt;/td&gt;
+&lt;td&gt;이자율 결정&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reserve Factor&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;프로토콜이 이자에서 떼가는 비율&lt;/td&gt;
+&lt;td&gt;10-35%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Factor&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;자산의 담보 가치 인정 비율&lt;/td&gt;
+&lt;td&gt;자산마다 다름&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="외워야-할-공식-3개"&gt;외워야 할 공식 3개
+&lt;/h3&gt;$$HF = \frac{LT}{LTV}$$$$\text{최대 허용 하락률} = 1 - \frac{LTV}{LT}$$$$\text{Supply APY} = \text{Borrow APR} \times \text{Utilization} \times (1 - \text{Reserve Factor})$$&lt;p&gt;세 번째 공식이 특히 중요하다. Supply APY가 Borrow APR보다 &lt;strong&gt;수학적으로 항상 작은&lt;/strong&gt; 이유가 여기 있다. 풀의 돈이 100% 빌려진 게 아니고(Utilization &amp;lt; 1), 프로토콜이 Reserve Factor만큼 떼가기 때문이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;단, 토큰 인센티브(COMP, AAVE)나 포인트/에어드랍까지 포함하면 역전될 수 있다. 2020년 DeFi Summer에 &amp;ldquo;빌리면 돈 버는&amp;rdquo; 상황이 실제로 발생했다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id="이자율-모델-jump-rate-model"&gt;이자율 모델: Jump Rate Model
+&lt;/h2&gt;&lt;p&gt;&amp;ldquo;사용률이 올라가면 이자율도 올라간다&amp;quot;는 단순한 원칙이지만, 구현 방식은 프로토콜마다 다르다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;프로토콜&lt;/th&gt;
+&lt;th&gt;모델&lt;/th&gt;
+&lt;th&gt;특징&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Compound V2&lt;/td&gt;
+&lt;td&gt;Jump Rate Model&lt;/td&gt;
+&lt;td&gt;원조. kink 지점에서 이자율 급등&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Aave V3&lt;/td&gt;
+&lt;td&gt;Variable Rate Strategy&lt;/td&gt;
+&lt;td&gt;비슷하지만 파라미터 구조 다름&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MakerDAO&lt;/td&gt;
+&lt;td&gt;거버넌스 직접 설정&lt;/td&gt;
+&lt;td&gt;알고리즘 아님&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Euler V2&lt;/td&gt;
+&lt;td&gt;모듈형&lt;/td&gt;
+&lt;td&gt;풀 생성자가 모델 직접 선택&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;DEX에서 &lt;code&gt;x * y = k&lt;/code&gt; (CPMM)가 원조 모델이듯, 렌딩에서는 Jump Rate Model이 원조다. &amp;ldquo;유일한 표준&amp;quot;은 아니지만, 대부분의 모델이 이걸 변형한 것이다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="ctoken-vs-atoken-이자를-반영하는-두-가지-방법"&gt;cToken vs aToken: 이자를 반영하는 두 가지 방법
+&lt;/h2&gt;&lt;p&gt;렌딩에 자산을 예치하면 &amp;ldquo;영수증 토큰&amp;quot;을 받는다. 이 영수증이 이자를 반영하는 방식이 Compound와 Aave에서 근본적으로 다르다.&lt;/p&gt;
+&lt;h3 id="compound의-ctoken-교환비율-상승"&gt;Compound의 cToken: 교환비율 상승
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;예치: 1,000 USDC → 50,000 cUSDC (교환비율 0.02)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1년후: 50,000 cUSDC 그대로, 교환비율 0.025로 상승
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;인출: 50,000 × 0.025 = 1,250 USDC
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;토큰 수량은 변하지 않고, &lt;strong&gt;교환비율이 올라간다.&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="aave의-atoken-잔고-자동-증가-rebase"&gt;Aave의 aToken: 잔고 자동 증가 (Rebase)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;예치: 1,000 USDC → 1,000 aUSDC (1:1)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1년후: 지갑에 1,050 aUSDC로 자동 증가
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;인출: 1,050 aUSDC → 1,050 USDC
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;교환비율은 1:1 고정이고, &lt;strong&gt;토큰 수량이 늘어난다.&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;비교&lt;/th&gt;
+&lt;th&gt;cToken&lt;/th&gt;
+&lt;th&gt;aToken&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;UX&lt;/td&gt;
+&lt;td&gt;비직관적 (교환비율 계산 필요)&lt;/td&gt;
+&lt;td&gt;직관적 (잔고 = 실제 가치)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DeFi 호환성&lt;/td&gt;
+&lt;td&gt;유리 (표준 ERC20)&lt;/td&gt;
+&lt;td&gt;불리 (rebase 토큰)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;수학&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;amount = shares × exchangeRate&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;balance = scaledBalance × index&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;수학적으로는 동일하다. &lt;strong&gt;&amp;ldquo;언제 곱하느냐&amp;quot;의 차이일 뿐이다.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="share-based-accounting-defi의-범용-패턴"&gt;Share-Based Accounting: DeFi의 범용 패턴
+&lt;/h2&gt;&lt;p&gt;cToken의 교환비율 패턴은 사실 DeFi 전반에서 반복되는 범용 패턴이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;지분으로 변환 → 전역 비율만 업데이트 → 인출 시 역변환
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;이 패턴을 쓰는 곳들:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;프로토콜&lt;/th&gt;
+&lt;th&gt;용도&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Compound cToken&lt;/td&gt;
+&lt;td&gt;렌딩 예치 영수증&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ERC-4626&lt;/td&gt;
+&lt;td&gt;토큰화된 Vault 표준&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Lido wstETH&lt;/td&gt;
+&lt;td&gt;Liquid Staking&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rocket Pool rETH&lt;/td&gt;
+&lt;td&gt;Liquid Staking&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Walrus StakingPool&lt;/td&gt;
+&lt;td&gt;스토리지 네트워크 스테이킹&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Walrus의 &lt;code&gt;StakingPool&lt;/code&gt;과 비교하면:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;span class="lnt"&gt;8
+&lt;/span&gt;&lt;span class="lnt"&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Compound cToken:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; exchange_rate = (totalCash + totalBorrows - totalReserves) / totalSupply
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; deposit: shares = amount / exchange_rate
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; withdraw: amount = shares × exchange_rate
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Walrus StakingPool:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; exchange_rate = total_wal / total_shares
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; stake: shares = principal × total_shares / total_wal
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; withdraw: amount = shares × total_wal / total_shares
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;같은 공식이다. 변수명만 다르다.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="가스-최적화의-핵심-scaled-balance"&gt;가스 최적화의 핵심: Scaled Balance
+&lt;/h2&gt;&lt;p&gt;aToken이 &amp;ldquo;잔고가 자동으로 늘어난다&amp;quot;면, 매번 모든 사용자의 잔고를 업데이트하는 걸까? 당연히 아니다. 그러면 가스비가 폭발한다.&lt;/p&gt;
+&lt;p&gt;핵심 아이디어: &lt;strong&gt;쓰기를 읽기로 바꾼다.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Scaled Balance = 예치금 / 예치 시점의 liquidityIndex
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;이 값은 한번 저장되면 &lt;strong&gt;절대 변하지 않는다.&lt;/strong&gt; 변하는 건 전역 &lt;code&gt;liquidityIndex&lt;/code&gt; 하나뿐이다.&lt;/p&gt;
+&lt;p&gt;잔고를 조회할 때 &lt;code&gt;scaledBalance × 현재 index&lt;/code&gt;로 계산한다. &lt;code&gt;balanceOf()&lt;/code&gt;는 view 함수이므로 가스비가 0이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;순진한 방식: 이자 발생 시 모든 사용자 잔고 SSTORE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → 1,000명 × 5,000 gas = 5,000,000 gas
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Scaled Balance: 전역 index 1개만 SSTORE
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → 5,000 gas
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; → 99.9% 절약
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;EVM에서 &lt;code&gt;SSTORE&lt;/code&gt;(쓰기)는 5,000 gas, &lt;code&gt;MUL&lt;/code&gt;(곱셈)은 5 gas다. &lt;strong&gt;쓰기는 계산보다 1,000배 비싸다.&lt;/strong&gt; Merkle Patricia Trie를 재계산하고 모든 노드에 영구 저장해야 하기 때문이다. Scaled Balance는 이 비용 구조를 정확히 활용한 최적화다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="compound-v2-vs-aave-v3-아키텍처-차이"&gt;Compound V2 vs Aave V3: 아키텍처 차이
+&lt;/h2&gt;&lt;p&gt;두 프로토콜의 가장 큰 차이는 코드 구조에 있다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Compound: CToken이 풀 역할까지 겸함 (Monolithic)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 사용자 → CToken.mint()
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Aave/우리 프로젝트: Pool과 토큰 분리 (Modular)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; 사용자 → Pool.deposit() → aToken.mint()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Compound의 CToken은 ERC20 토큰이면서 동시에 렌딩 풀이다. &lt;code&gt;mint()&lt;/code&gt;, &lt;code&gt;borrow()&lt;/code&gt;, &lt;code&gt;repay()&lt;/code&gt;, &lt;code&gt;liquidate()&lt;/code&gt; 모두 CToken 컨트랙트에 있다. 반면 Aave는 Pool이 중심이고 aToken은 순수한 영수증 토큰이다.&lt;/p&gt;
+&lt;h3 id="compound-v2-코드-리딩-가이드"&gt;Compound V2 코드 리딩 가이드
+&lt;/h3&gt;&lt;p&gt;Compound V2 코드를 읽고 싶다면, 핵심 &lt;strong&gt;3개 파일, 5개 함수&lt;/strong&gt;만 보면 된다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CToken.sol&lt;/strong&gt; - 핵심 함수 5개:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;accrueInterest()&lt;/code&gt; - 이자 누적 (borrowIndex = scaled balance 패턴)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mintFresh()&lt;/code&gt; - 예치&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;borrowFresh()&lt;/code&gt; - 대출&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;repayBorrowFresh()&lt;/code&gt; - 상환&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;liquidateBorrowFresh()&lt;/code&gt; - 청산&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Comptroller.sol&lt;/strong&gt; - 핵심 함수 1개:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;getHypotheticalAccountLiquidityInternal()&lt;/code&gt; - Health Factor 계산&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;BaseJumpRateModelV2.sol&lt;/strong&gt; - 이자율 모델&lt;/p&gt;
+&lt;p&gt;나머지(Governance, Lens, Timelock 등)는 렌딩 로직과 무관하므로 무시해도 된다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="이자율의-3개-레이어"&gt;이자율의 3개 레이어
+&lt;/h2&gt;&lt;p&gt;DeFi에서 실제 수익률은 단순한 이자율이 아니라 3개 레이어의 합이다.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Layer 1: 기본 이자 → Jump Rate Model이 결정
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Layer 2: 토큰 인센티브 → COMP, AAVE 등 거버넌스 토큰 보상
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Layer 3: 포인트/에어드랍 → Blast, EigenLayer 등
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Layer 2, 3까지 포함하면 &amp;ldquo;빌리면 돈 버는&amp;rdquo; 상황도 발생한다. 2020 DeFi Summer에 COMP 보상이 대출 이자보다 커서 Compound에서 빌리는 것 자체가 수익이었던 것이 대표적인 사례다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="day-1-핵심-인사이트-정리"&gt;Day 1 핵심 인사이트 정리
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;렌딩의 본질은 풀 기반 중개&lt;/strong&gt; - 예치자와 대출자를 직접 매칭하지 않고, 풀을 통해 간접 매칭한다. 스테이킹 풀과 동일한 패턴.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Share-Based Accounting은 DeFi의 범용 패턴&lt;/strong&gt; - cToken, ERC-4626, wstETH, rETH, Walrus 전부 같은 원리. &amp;ldquo;지분으로 변환 → 전역 비율만 업데이트 → 인출 시 역변환.&amp;rdquo;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;가스 최적화의 핵심은 &amp;ldquo;쓰기를 읽기로 바꾸기&amp;rdquo;&lt;/strong&gt; - SSTORE는 계산보다 1,000배 비싸다. Scaled Balance 패턴으로 전역 index 하나만 업데이트하고 나머지는 읽기 시점에 계산.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Compound는 Monolithic, Aave는 Modular&lt;/strong&gt; - CToken이 풀 겸 토큰 vs Pool과 토큰 분리.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;실제 수익률 = 기본 이자 + 토큰 인센티브 + 포인트&lt;/strong&gt; - 3개 레이어를 모두 봐야 DeFi의 실제 경제를 이해할 수 있다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id="next-day-2"&gt;Next: Day 2
+&lt;/h2&gt;&lt;p&gt;내일은 &lt;strong&gt;Aave V3 아키텍처를 코드 레벨로&lt;/strong&gt; 들어간다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Pool.sol&lt;/code&gt;, &lt;code&gt;SupplyLogic.sol&lt;/code&gt;, &lt;code&gt;BorrowLogic.sol&lt;/code&gt;, &lt;code&gt;LiquidationLogic.sol&lt;/code&gt; 리딩&lt;/li&gt;
+&lt;li&gt;Fork Testing으로 Aave V3 메인넷 상태에서 직접 테스트&lt;/li&gt;
+&lt;li&gt;Fuzz Testing으로 이자율 엣지 케이스 탐색&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;이 시리즈의 전체 코드와 학습 자료는 &lt;a class="link" href="https://github.com/jeongseup/lending-protocol-study" target="_blank" rel="noopener"
+&gt;lending-protocol-study&lt;/a&gt; 레포에서 확인할 수 있다.&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>

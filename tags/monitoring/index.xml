@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Monitoring on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/monitoring/</link><description>Recent content in Monitoring on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 13 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/monitoring/index.xml" rel="self" type="application/rss+xml"/><item><title>[Cosmos] Listed CVMS in Awesome Cosmos</title><link>https://jeongseup.github.io/contribution/cvms-launch/</link><pubDate>Wed, 13 Nov 2024 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/contribution/cvms-launch/</guid><description>&lt;h3 id="contribution-description"&gt;Contribution Description
+&lt;/h3&gt;&lt;p&gt;Successfully listed the &lt;strong&gt;Cosmos Validator Monitoring Service (CVMS)&lt;/strong&gt; in the official &lt;a class="link" href="https://github.com/cosmos/awesome-cosmos" target="_blank" rel="noopener"
+&gt;Awesome Cosmos&lt;/a&gt; repository under the Monitoring Tools section.
+This project provides a comprehensive monitoring solution for Cosmos SDK-based validators.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/cosmostation/cvms" target="_blank" rel="noopener"
+&gt;View on GitHub&lt;/a&gt;
+&lt;a class="link" href="https://github.com/cosmos/awesome-cosmos/pull/171" target="_blank" rel="noopener"
+&gt;View Pull Request&lt;/a&gt;&lt;/p&gt;</description></item><item><title>[Tenderduty] Support Valcons Address for ICS Chains</title><link>https://jeongseup.github.io/contribution/blockpane-tenderduty-63/</link><pubDate>Sat, 13 May 2023 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/contribution/blockpane-tenderduty-63/</guid><description>&lt;h3 id="feature-description"&gt;Feature Description
+&lt;/h3&gt;&lt;p&gt;Added support for referencing &lt;strong&gt;Interchain Security (ICS)&lt;/strong&gt; validators using their &lt;code&gt;valcons&lt;/code&gt; address.
+This is critical for correctly monitoring consumer chains where validators might share the same consensus key but have different operator addresses.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/blockpane/tenderduty/pull/63" target="_blank" rel="noopener"
+&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Next.js on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/next.js/</link><description>Recent content in Next.js on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 01 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/next.js/index.xml" rel="self" type="application/rss+xml"/><item><title>BaseCard</title><link>https://jeongseup.github.io/project/basecard/</link><pubDate>Sat, 01 Nov 2025 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/basecard/</guid><description>&lt;img src="https://jeongseup.github.io/img/thumbs/project_basecard.png" alt="Featured image of post BaseCard" /&gt;&lt;h2 id="role"&gt;Role
+&lt;/h2&gt;&lt;p&gt;Founder &amp;amp; Full Stack Developer&lt;/p&gt;
+&lt;h2 id="description"&gt;Description
+&lt;/h2&gt;&lt;p&gt;Initiated BaseCard as a Farcaster miniapp during &lt;a class="link" href="https://base-batches-builder-track.devfolio.co/overview" target="_blank" rel="noopener"
+&gt;base-batches-002&lt;/a&gt;.
+Designed and led full-stack development (Backend, Miniapp, Smart Contract, Deploy Agent).&lt;/p&gt;
+&lt;h2 id="tech-stack"&gt;Tech Stack
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;NestJS&lt;/li&gt;
+&lt;li&gt;Next.js&lt;/li&gt;
+&lt;li&gt;Solidity&lt;/li&gt;
+&lt;li&gt;Foundry&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

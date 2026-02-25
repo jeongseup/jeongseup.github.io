@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Go on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/go/</link><description>Recent content in Go on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 13 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/go/index.xml" rel="self" type="application/rss+xml"/><item><title>CVMS (Cosmos Validator Monitoring Service)</title><link>https://jeongseup.github.io/project/cvms/</link><pubDate>Wed, 13 Nov 2024 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/cvms/</guid><description>&lt;img src="https://jeongseup.github.io/img/thumbs/project_cvms.png" alt="Featured image of post CVMS (Cosmos Validator Monitoring Service)" /&gt;&lt;h2 id="role"&gt;Role
+&lt;/h2&gt;&lt;p&gt;Lead Developer&lt;/p&gt;
+&lt;h2 id="description"&gt;Description
+&lt;/h2&gt;&lt;p&gt;An open-source monitoring tool designed for Cosmos-SDK validator nodes. It provides real-time metrics and alerts to ensure node stability and performance.&lt;/p&gt;
+&lt;h2 id="tech-stack"&gt;Tech Stack
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Go&lt;/li&gt;
+&lt;li&gt;Prometheus&lt;/li&gt;
+&lt;li&gt;Grafana&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>[bnb-chain/[**greenfield-go-sdk**](https://github.com/bnb-chain/greenfield-go-sdk)] Add a feature</title><link>https://jeongseup.github.io/contribution/bnb-chain-greenfield-go-sdk-74/</link><pubDate>Mon, 03 Jul 2023 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/contribution/bnb-chain-greenfield-go-sdk-74/</guid><description>&lt;h3 id="feature-description"&gt;Feature Description
+&lt;/h3&gt;&lt;p&gt;Added support for sending &lt;strong&gt;multiple messages in a single transaction&lt;/strong&gt;.
+This feature allows for batch operations, such as cancelling all failed objects in one go, significantly improving efficiency and reducing gas usage.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/bnb-chain/greenfield-go-sdk/pull/74" target="_blank" rel="noopener"
+&gt;View on GitHub&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

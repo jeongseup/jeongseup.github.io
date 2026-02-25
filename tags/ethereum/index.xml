@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ethereum on Jeongseup Blog</title><link>https://jeongseup.github.io/tags/ethereum/</link><description>Recent content in Ethereum on Jeongseup Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 01 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://jeongseup.github.io/tags/ethereum/index.xml" rel="self" type="application/rss+xml"/><item><title>Lido CSM Operator</title><link>https://jeongseup.github.io/project/lido-csm-operator/</link><pubDate>Sat, 01 Nov 2025 00:00:00 +0000</pubDate><guid>https://jeongseup.github.io/project/lido-csm-operator/</guid><description>&lt;img src="https://jeongseup.github.io/img/thumbs/project_lido.png" alt="Featured image of post Lido CSM Operator" /&gt;&lt;h2 id="role"&gt;Role
+&lt;/h2&gt;&lt;p&gt;Community Staking Module Node Operator&lt;/p&gt;
+&lt;h2 id="description"&gt;Description
+&lt;/h2&gt;&lt;p&gt;Participating in the Lido CSM(Community Staking Module) to support a decentralized validator node community.
+Developing an open-source IaC tool for the community: &lt;a class="link" href="https://github.com/jeongseup/lido-csm-node-operator" target="_blank" rel="noopener"
+&gt;lido-csm-node-operator&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="tech-stack"&gt;Tech Stack
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Terraform&lt;/li&gt;
+&lt;li&gt;Ansible&lt;/li&gt;
+&lt;li&gt;Ethereum&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>
