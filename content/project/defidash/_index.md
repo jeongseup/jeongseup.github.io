@@ -1,6 +1,7 @@
 ---
 title: "DefiDash"
 date: 2026-01-22
+image: img/thumbs/project_defidash.jpeg
 description: "A DeFi leverage lending aggregator for the Sui ecosystem. Aggregates lending protocols to provide optimized leverage strategies for consumer users."
 categories:
     - "DeFi"
