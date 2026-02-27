@@ -6,7 +6,7 @@ authors: ["Jeongseup"]
 description: "Sui 블록체인의 접근 제어를 활용한 탈중앙화 키 관리 프로토콜 Seal의 아키텍처, IBE·Threshold Cryptography 기반 동작 원리, 그리고 코드 레벨 분석."
 slug: seal-protocol-study
 tags: ["Sui", "Cryptography", "Seal", "IBE", "Walrus"]
-categories: ["Technical Research"]
+categories: []
 math: true
 ---
 

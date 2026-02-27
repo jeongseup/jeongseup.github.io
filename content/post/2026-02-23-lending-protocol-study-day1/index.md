@@ -3,8 +3,7 @@ title: "Lending Protocol Study Day 1: DeFi 렌딩의 핵심 개념과 아키텍�
 description: "7일간의 DeFi Lending Protocol 스터디 시리즈. 풀 기반 중개, Share-Based Accounting, Scaled Balance 가스 최적화, Compound vs Aave 아키텍처까지."
 slug: lending-protocol-study-day1
 date: 2026-02-23
-categories:
-    - Technical Research
+categories: []
 tags:
     - DeFi
     - Lending

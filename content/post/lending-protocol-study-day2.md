@@ -6,7 +6,7 @@ authors: ["Jeongseup"]
 description: "Compound V2 CToken 상속 구조와 Fresh 패턴, 3가지 렌딩 모델 유형 분석, Aave V3 비트맵 스토리지 최적화까지."
 slug: lending-protocol-study-day2
 tags: ["DeFi", "Lending", "Compound", "Aave", "Solidity", "Smart Contract"]
-categories: ["Technical Research"]
+categories: []
 series: ["Lending Protocol Study"]
 math: true
 ---
